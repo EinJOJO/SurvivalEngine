@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,5 +26,6 @@ public class PlayerJoinListener implements Listener {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player.sendTitle("§b§lWillkommen!", "", 25, 50, 25);
 
+        player.getDiscoveredRecipes().add(NamespacedKey.minecraft("teleport_crystal"));
     }
 }
