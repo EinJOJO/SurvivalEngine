@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.util.Objects;
+
 public class PlayerDeathListener implements Listener {
 
     private final SurvivalEngine plugin;
@@ -18,7 +20,7 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void sendDeathMessage(PlayerDeathEvent e) {
         Player player = e.getEntity();
-        e.setDeathMessage(plugin.getPREFIX() + e.getDeathMessage());
+        e.setDeathMessage(plugin.getPREFIX() + Objects.requireNonNull(e.getDeathMessage()).replace(player.getName(), "§e" + player.getName() + "§7"));
         player.sendMessage();
     }
 
