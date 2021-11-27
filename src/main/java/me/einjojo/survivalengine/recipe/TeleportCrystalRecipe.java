@@ -12,9 +12,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleportCrystal implements CustomRecipe {
+public class TeleportCrystalRecipe implements CustomRecipe {
 
-    public TeleportCrystal(SurvivalEngine plugin) {
+    public TeleportCrystalRecipe(SurvivalEngine plugin) {
         plugin.addRecipe(this);
     }
 

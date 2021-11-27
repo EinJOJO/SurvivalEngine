@@ -1,10 +1,11 @@
 package me.einjojo.survivalengine;
 
+import me.einjojo.survivalengine.listener.BlockPlaceListener;
 import me.einjojo.survivalengine.listener.PlayerDeathListener;
 import me.einjojo.survivalengine.listener.PlayerJoinListener;
 import me.einjojo.survivalengine.listener.PlayerQuitListener;
 import me.einjojo.survivalengine.recipe.CustomRecipe;
-import me.einjojo.survivalengine.recipe.TeleportCrystal;
+import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public final class SurvivalEngine extends JavaPlugin {
     }
 
     private void registerRecipes() {
-        new TeleportCrystal(this);
+        new TeleportCrystalRecipe(this);
     }
 
     public void addRecipe(CustomRecipe customRecipe) {
@@ -39,6 +40,7 @@ public final class SurvivalEngine extends JavaPlugin {
     }
 
     private void registerListeners( ) {
+        new BlockPlaceListener(this);
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
