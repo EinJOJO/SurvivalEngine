@@ -1,0 +1,6 @@
+name: SurvivalEngine
+version: '${project.version}'
+main: me.einjojo.survivalengine.SurvivalEngine
+api-version: 1.17
+authors: [ Ein_Jojo ]
+description: Just improving the overall survival feeling
