@@ -4,6 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Objects;
@@ -23,5 +24,7 @@ public class PlayerDeathListener implements Listener {
         e.setDeathMessage(plugin.getPREFIX() + Objects.requireNonNull(e.getDeathMessage()).replace(player.getName(), "§e" + player.getName() + "§7"));
         player.sendMessage();
     }
+
+
 
 }

@@ -22,10 +22,11 @@ public class PlayerJoinListener implements Listener {
         Player player = e.getPlayer();
         e.setJoinMessage(plugin.getPREFIX() + "§e" + player.getName() + "§7 hat den Server §abetreten");
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            player.resetTitle();
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-            player.sendTitle("§b§lWillkommen!", "", 25, 50, 25);
-        }, 20L);
+        plugin.recipeManager.loadRecipes(player);
+        player.resetTitle();
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+        player.sendTitle("§b§lWillkommen!", "", 25, 50, 25);
+        plugin.tabListManager.setPlayerList(player);
+        plugin.tabListManager.setPlayerTeams(player);
     }
 }

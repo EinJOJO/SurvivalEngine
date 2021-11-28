@@ -6,7 +6,7 @@
 
     <groupId>me.einjojo</groupId>
     <artifactId>survival-engine</artifactId>
-    <version>CRYSTAL</version>
+    <version>TELEPORT</version>
     <packaging>jar</packaging>
 
     <name>Survival Engine</name>

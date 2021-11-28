@@ -9,6 +9,7 @@ import me.einjojo.survivalengine.recipe.CustomRecipe;
 import me.einjojo.survivalengine.recipe.RecipeManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
+import me.einjojo.survivalengine.tablist.TabListManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ public final class SurvivalEngine extends JavaPlugin {
     private final String PREFIX = "§7「§b§lΣNGINΣ§7」» ";
 
     public RecipeManager recipeManager;
+    public TabListManager tabListManager;
 
     @Override
     public void onEnable() {
@@ -44,6 +46,7 @@ public final class SurvivalEngine extends JavaPlugin {
 
     private void initClasses() {
         this.recipeManager = new RecipeManager(this);
+        this.tabListManager = new TabListManager();
     }
 
 

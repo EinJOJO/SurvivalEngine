@@ -12,10 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleportCrystalRecipe implements CustomRecipe {
+public class TeleportCrystalRecipe extends CustomRecipe {
 
     public TeleportCrystalRecipe(SurvivalEngine plugin) {
-        plugin.addRecipe(this);
+        super(NamespacedKey.minecraft("teleport_crystal"));
+        plugin.recipeManager.addRecipe(this);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TeleportCrystalRecipe implements CustomRecipe {
 
     @Override
     public ShapelessRecipe getRecipe () {
-        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(NamespacedKey.minecraft("teleport_crystal"), getItem());
+        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(getNamespace(), getItem());
         shapelessRecipe.addIngredient(1, Material.AMETHYST_SHARD);
         shapelessRecipe.addIngredient(1, Material.ENDER_EYE);
         shapelessRecipe.addIngredient(2, Material.GLOW_INK_SAC);

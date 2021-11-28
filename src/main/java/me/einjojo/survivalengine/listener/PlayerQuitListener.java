@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener {
 
-    private SurvivalEngine plugin;
+    private final SurvivalEngine plugin;
 
     public PlayerQuitListener(SurvivalEngine plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);

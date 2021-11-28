@@ -89,14 +89,14 @@ public class DifficultyCommand implements CommandExecutor {
     }
     private void sendCooldownMessage(Player player) {
         player.sendMessage(plugin.getPREFIX() + "Oh nein! Ein Cooldown...");
-        long time = cooldown.get(player);
+        long time = cooldown.get(player) - System.currentTimeMillis();
 
         long millis = time % 1000;
         long second = (time / 1000) % 60;
         long minute = (time / (1000 * 60)) % 60;
         long hour = (time / (1000 * 60 * 60)) % 24;
 
-        String remaining = String.format("%02d:%02d:%02d.%d", hour, minute, second, millis);
+        String remaining = String.format("%02d:%02d:%02d", hour, minute, second);
 
         player.sendMessage(plugin.getPREFIX() + "Verbleibende Zeit: §c" + remaining);
     }
@@ -106,11 +106,12 @@ public class DifficultyCommand implements CommandExecutor {
         world.setDifficulty(difficulty);
         setCooldown(player, time);
 
-        Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde von §e " + player.getName() + " §7auf §c" + difficulty.name() + " §7gesetzt");
+        Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde von §e" + player.getName() + " §7auf §c" + difficulty.name() + " §7gesetzt.");
+        Bukkit.broadcastMessage(plugin.getPREFIX() + "Länge: §e" + time + " Minuten");
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             world.setDifficulty(Difficulty.NORMAL);
-            Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde auf §cNormal §7zurückgesetzt.");
+            Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde auf §cNORMAL §7zurückgesetzt.");
         }, time * 60 * 20);
     }
 
