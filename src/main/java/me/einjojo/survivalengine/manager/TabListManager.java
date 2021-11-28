@@ -1,4 +1,4 @@
-package me.einjojo.survivalengine.tablist;
+package me.einjojo.survivalengine.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

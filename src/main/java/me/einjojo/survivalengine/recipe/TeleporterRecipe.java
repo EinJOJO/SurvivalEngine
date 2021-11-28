@@ -13,15 +13,22 @@ import java.util.List;
 
 public class TeleporterRecipe extends CustomRecipe {
 
+
+    private static ItemStack itemStack;
+
     public TeleporterRecipe (SurvivalEngine plugin) {
         super(NamespacedKey.minecraft("teleporter"));
         plugin.recipeManager.addRecipe(this);
     }
 
+    public static ItemStack getItemStack() {
+        return itemStack;
+    }
+
     @Override
     public ItemStack getItem() {
-        ItemStack itemStack = new ItemStack(Material.END_CRYSTAL, 1);
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemStack item = new ItemStack(Material.END_CRYSTAL, 1);
+        ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName("§dTeleporter");
         List<String> lore = new ArrayList<>();
 
@@ -31,9 +38,11 @@ public class TeleporterRecipe extends CustomRecipe {
         lore.add("§cCaution: Dont hit it!");
 
         itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
+        item.setItemMeta(itemMeta);
 
-        return itemStack;
+
+        itemStack = item;
+        return item;
     }
 
     @Override

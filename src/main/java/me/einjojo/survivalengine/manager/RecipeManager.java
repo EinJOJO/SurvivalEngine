@@ -1,6 +1,7 @@
-package me.einjojo.survivalengine.recipe;
+package me.einjojo.survivalengine.manager;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.recipe.CustomRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -12,7 +13,7 @@ public class RecipeManager {
 
     private final SurvivalEngine plugin;
 
-    private ArrayList<NamespacedKey> recipes = new ArrayList<>();
+    private final ArrayList<NamespacedKey> recipes = new ArrayList<>();
 
     public RecipeManager(SurvivalEngine plugin) {
         this.plugin = plugin;

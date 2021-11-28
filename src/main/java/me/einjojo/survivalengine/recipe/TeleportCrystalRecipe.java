@@ -14,6 +14,8 @@ import java.util.List;
 
 public class TeleportCrystalRecipe extends CustomRecipe {
 
+    private static ItemStack itemStack;
+
     public TeleportCrystalRecipe(SurvivalEngine plugin) {
         super(NamespacedKey.minecraft("teleport_crystal"));
         plugin.recipeManager.addRecipe(this);
@@ -34,7 +36,12 @@ public class TeleportCrystalRecipe extends CustomRecipe {
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         item.setItemMeta(meta);
 
+        itemStack = item;
         return item;
+    }
+
+    public static ItemStack getItemStack() {
+        return itemStack;
     }
 
     @Override

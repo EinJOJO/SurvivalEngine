@@ -1,4 +1,4 @@
-package me.einjojo.survivalengine.scoreboard;
+package me.einjojo.survivalengine.util;
 
 
 import org.bukkit.Bukkit;

@@ -1,18 +1,16 @@
 package me.einjojo.survivalengine;
 
 import me.einjojo.survivalengine.command.DifficultyCommand;
-import me.einjojo.survivalengine.listener.BlockPlaceListener;
+import me.einjojo.survivalengine.command.GetCommand;
+import me.einjojo.survivalengine.listener.EntityPlaceListener;
 import me.einjojo.survivalengine.listener.PlayerDeathListener;
 import me.einjojo.survivalengine.listener.PlayerJoinListener;
 import me.einjojo.survivalengine.listener.PlayerQuitListener;
-import me.einjojo.survivalengine.recipe.CustomRecipe;
-import me.einjojo.survivalengine.recipe.RecipeManager;
+import me.einjojo.survivalengine.manager.RecipeManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
-import me.einjojo.survivalengine.tablist.TabListManager;
+import me.einjojo.survivalengine.manager.TabListManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Level;
 
 public final class SurvivalEngine extends JavaPlugin {
 
@@ -52,10 +50,11 @@ public final class SurvivalEngine extends JavaPlugin {
 
     private void registerCommands() {
         new DifficultyCommand(this);
+        new GetCommand(this);
     }
 
     private void registerListeners( ) {
-        new BlockPlaceListener(this);
+        new EntityPlaceListener(this);
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);

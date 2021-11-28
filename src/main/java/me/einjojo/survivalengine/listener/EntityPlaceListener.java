@@ -14,25 +14,24 @@ import org.bukkit.event.entity.EntityPlaceEvent;
 
 import java.util.UUID;
 
-public class BlockPlaceListener implements Listener {
+public class EntityPlaceListener implements Listener {
 
     private final SurvivalEngine plugin;
-    public BlockPlaceListener(SurvivalEngine plugin) {
+    public EntityPlaceListener(SurvivalEngine plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
-    public void TeleportPlace2 (EntityPlaceEvent e) {
+    public void onTeleporterPlace(EntityPlaceEvent e) {
        if (!(e.getEntity() instanceof CraftEnderCrystal)) {
            return;
        }
-
        if(!(e.getBlock().getType().equals(Material.OBSIDIAN))) {
            return;
        }
        e.getEntity().setInvulnerable(true);
-        e.getBlock().getWorld().strikeLightning(e.getBlock().getLocation());
+        e.getBlock().getWorld().strikeLightningEffect(e.getBlock().getLocation());
         final Player player = e.getPlayer();
         player.sendMessage(plugin.getPREFIX() + "Der Teleporter wird eingerichtet...");
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin,()->{
