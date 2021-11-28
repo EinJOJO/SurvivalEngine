@@ -1,11 +1,14 @@
 package me.einjojo.survivalengine;
 
+import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.listener.BlockPlaceListener;
 import me.einjojo.survivalengine.listener.PlayerDeathListener;
 import me.einjojo.survivalengine.listener.PlayerJoinListener;
 import me.einjojo.survivalengine.listener.PlayerQuitListener;
 import me.einjojo.survivalengine.recipe.CustomRecipe;
+import me.einjojo.survivalengine.recipe.RecipeManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
+import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -14,10 +17,15 @@ public final class SurvivalEngine extends JavaPlugin {
 
     private final String PREFIX = "§7「§b§lΣNGINΣ§7」» ";
 
+    public RecipeManager recipeManager;
+
     @Override
     public void onEnable() {
+        initClasses();
         registerListeners();
         registerRecipes();
+        registerCommands();
+
     }
 
     @Override
@@ -31,12 +39,16 @@ public final class SurvivalEngine extends JavaPlugin {
 
     private void registerRecipes() {
         new TeleportCrystalRecipe(this);
+        new TeleporterRecipe(this);
     }
 
-    public void addRecipe(CustomRecipe customRecipe) {
-        getServer().addRecipe(customRecipe.getRecipe());
-        getLogger().log(Level.INFO, "Registered new Recipe");
+    private void initClasses() {
+        this.recipeManager = new RecipeManager(this);
+    }
 
+
+    private void registerCommands() {
+        new DifficultyCommand(this);
     }
 
     private void registerListeners( ) {

@@ -4,3 +4,6 @@ main: me.einjojo.survivalengine.SurvivalEngine
 api-version: 1.17
 authors: [ Ein_Jojo ]
 description: Just improving the overall survival feeling
+commands:
+  difficulty:
+    description: Change the difficulty for a period of time
