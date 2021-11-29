@@ -18,6 +18,13 @@ public class TeleporterPlaceEvent extends Event implements Cancellable {
         this.block = block;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+    public Block getBlock() {
+        return block;
+    }
+
     @Override
     public HandlerList getHandlers() {
         return HANDLER_LIST;

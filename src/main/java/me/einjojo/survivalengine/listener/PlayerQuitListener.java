@@ -18,7 +18,6 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-
         e.setQuitMessage(plugin.getPREFIX() + "§e" + player.getName() + "§7 hat den Server §cverlassen.");
     }
 

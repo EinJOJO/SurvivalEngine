@@ -2,10 +2,7 @@ package me.einjojo.survivalengine;
 
 import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.command.GetCommand;
-import me.einjojo.survivalengine.listener.EntityPlaceListener;
-import me.einjojo.survivalengine.listener.PlayerDeathListener;
-import me.einjojo.survivalengine.listener.PlayerJoinListener;
-import me.einjojo.survivalengine.listener.PlayerQuitListener;
+import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.RecipeManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
@@ -54,7 +51,9 @@ public final class SurvivalEngine extends JavaPlugin {
     }
 
     private void registerListeners( ) {
-        new EntityPlaceListener(this);
+        //new EntityPlaceListener(this);
+        new TeleporterPlaceListener(this);
+        new PlayerInteractListener(this);
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
