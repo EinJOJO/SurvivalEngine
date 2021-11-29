@@ -29,7 +29,6 @@ public class PlayerInteractListener implements Listener {
         if(!e.getItem().isSimilar(TeleporterRecipe.getItemStack())) return;
         Block block = e.getClickedBlock();
         if(block == null) return;
-        if(block.getType() != Material.OBSIDIAN) return;
         e.setCancelled(true); // Don't Place it
 
         if(e.getBlockFace().equals(BlockFace.UP)) {
@@ -37,11 +36,11 @@ public class PlayerInteractListener implements Listener {
             e.getItem().setAmount(e.getItem().getAmount() - 1);
             TeleporterPlaceEvent teleporterPlaceEvent = new TeleporterPlaceEvent(player, block);
             Bukkit.getPluginManager().callEvent(teleporterPlaceEvent);
+
+            if(teleporterPlaceEvent.isCancelled()) {
+                player.getInventory().addItem(TeleporterRecipe.getItemStack());
+            }
+
         };
-
     }
-
-
-
-
 }
