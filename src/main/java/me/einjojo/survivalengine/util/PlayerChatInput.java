@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -61,7 +62,21 @@ public class PlayerChatInput implements Listener {
             return;
         }
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> current.callback.run(input), 3);
+    }
 
+    @EventHandler
+    private void onDeath(PlayerDeathEvent e) {
+        Player player = e.getEntity();
+        UUID uuid = player.getUniqueId();
+
+        if(!inputs.containsKey(uuid)){
+            return;
+        }
+        PlayerChatInput current = inputs.get(uuid);
+        current.taskID.cancel();
+        current.unregister();
+        player.resetTitle();
+        player.sendMessage(plugin.getPREFIX() + "§cabgebrochen.");
     }
 
     private void register() {
