@@ -42,9 +42,9 @@ public class PlayerChatInput implements Listener {
 
     @EventHandler
     private void onChat(AsyncPlayerChatEvent e) {
-        final String input = e.getMessage();
-        final Player player = e.getPlayer();
-        final UUID playerUUID = player.getUniqueId();
+        String input = e.getMessage();
+        Player player = e.getPlayer();
+        UUID playerUUID = player.getUniqueId();
 
         if(!inputs.containsKey(playerUUID)) {
             return;
@@ -58,10 +58,11 @@ public class PlayerChatInput implements Listener {
         current.unregister();
         player.resetTitle();
         if(input.equalsIgnoreCase("cancel")) {
+            input = null;
             player.sendMessage(plugin.getPREFIX() + "§cabgebrochen.");
-            return;
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> current.callback.run(input), 3);
+        String finalInput = input;
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> current.callback.run(finalInput), 3);
     }
 
     @EventHandler
@@ -76,6 +77,7 @@ public class PlayerChatInput implements Listener {
         current.taskID.cancel();
         current.unregister();
         player.resetTitle();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> current.callback.run(null), 3);
         player.sendMessage(plugin.getPREFIX() + "§cabgebrochen.");
     }
 
