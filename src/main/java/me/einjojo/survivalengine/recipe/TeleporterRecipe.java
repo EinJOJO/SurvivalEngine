@@ -29,13 +29,13 @@ public class TeleporterRecipe extends CustomRecipe {
     public ItemStack getItem() {
         ItemStack item = new ItemStack(Material.END_CRYSTAL, 1);
         ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName("§dTeleporter");
+        itemMeta.setDisplayName("§d§lTeleporter");
         List<String> lore = new ArrayList<>();
 
-        lore.add("§7Place this Teleporter on an");
-        lore.add("§5Obsidian §7Block");
+        lore.add("§7Plaziere mich an einem");
+        lore.add("§7sicheren Ort!");
         lore.add("");
-        lore.add("§cCaution: Dont hit it!");
+        lore.add("§cAchtung: Explosionsgefahr");
 
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);

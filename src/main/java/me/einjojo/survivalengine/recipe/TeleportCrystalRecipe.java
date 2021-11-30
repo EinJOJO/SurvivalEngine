@@ -27,9 +27,14 @@ public class TeleportCrystalRecipe extends CustomRecipe {
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
         meta.setDisplayName("§dTeleport Crystal");
+        meta.setLocalizedName("§dLocalized Name");
         List<String> lore = new ArrayList<>();
-        lore.add("§7This crystal can teleport you!");
-        lore.add("§7");
+        lore.add("");
+        lore.add("§7Einmal an einen §5Teleporter§7,");
+        lore.add("§7gebunden kannst du dich");
+        lore.add("§7jederzeit zu ihm teleportieren");
+        lore.add("");
+        lore.add("");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
