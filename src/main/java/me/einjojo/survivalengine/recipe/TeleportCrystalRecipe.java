@@ -26,15 +26,14 @@ public class TeleportCrystalRecipe extends CustomRecipe {
         ItemStack item = new ItemStack(Material.AMETHYST_SHARD, 1);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
-        meta.setDisplayName("§dTeleport Crystal");
-        meta.setLocalizedName("§dLocalized Name");
+        meta.setDisplayName("§dTeleport Kristall");
         List<String> lore = new ArrayList<>();
         lore.add("");
         lore.add("§7Einmal an einen §5Teleporter§7,");
         lore.add("§7gebunden kannst du dich");
         lore.add("§7jederzeit zu ihm teleportieren");
         lore.add("");
-        lore.add("");
+        lore.add("§cVerlinke mich an einen Teleporter");
         meta.setLore(lore);
         meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

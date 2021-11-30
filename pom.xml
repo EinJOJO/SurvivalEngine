@@ -6,7 +6,7 @@
 
     <groupId>me.einjojo</groupId>
     <artifactId>survival-engine</artifactId>
-    <version>TELEPORT</version>
+    <version>CRYSTAL</version>
     <packaging>jar</packaging>
 
     <name>Survival Engine</name>
@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>D:\Workspace\Minecraft\Testserver\1.17.1\plugins\Survival Engine v${version}.jar</outputFile>
+                            <outputFile>D:\Workspace\Minecraft\Testserver\1.18.0\plugins\Survival Engine v${version}.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
