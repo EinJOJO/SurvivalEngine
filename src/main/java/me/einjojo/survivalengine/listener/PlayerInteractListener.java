@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -54,6 +55,7 @@ public class PlayerInteractListener implements Listener {
 
         if(!e.getHand().equals(EquipmentSlot.HAND)) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
+        if(plugin.getTeleportManager().getInteractBlackList().contains(player)) return;
         if(itemStack == null) return;
         if(!itemStack.getItemMeta().getDisplayName().equals(TeleportCrystalRecipe.getItemStack().getItemMeta().getDisplayName())) return;
 
@@ -68,13 +70,14 @@ public class PlayerInteractListener implements Listener {
         Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterName);
         if(teleporter == null) {
             player.sendMessage(plugin.getPREFIX() + "§cDer Teleporter existiert nicht mehr!");
+            itemStack.setAmount(itemStack.getAmount() - 1);
             player.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
             return;
         }
 
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 1, 255));
-        player.teleport(teleporter.getLocation().add(1,0,0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 255));
+        player.teleport(teleporter.getLocation());
         player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 3);
         itemStack.setAmount(itemStack.getAmount() - 1);
 

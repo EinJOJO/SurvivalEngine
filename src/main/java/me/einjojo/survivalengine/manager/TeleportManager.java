@@ -7,11 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class TeleportManager {
@@ -19,12 +17,14 @@ public class TeleportManager {
     private final SurvivalEngine plugin;
     private final TeleporterConfig config;
     private final Map<String, Teleporter> teleporterMap;
+    private final List<Player> interactBlackList;
 
 
     public TeleportManager(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.config = new TeleporterConfig(plugin);
         this.teleporterMap = new HashMap<>();
+        this.interactBlackList = new ArrayList<>();
     }
 
 
@@ -38,8 +38,11 @@ public class TeleportManager {
     }
 
     public Teleporter getTeleporter(String name) {
-
         return teleporterMap.get(name.substring(2));
+    }
+
+    public List<Player> getInteractBlackList() {
+        return interactBlackList;
     }
 
     public void deleteTeleporter(Teleporter teleporter) {

@@ -4,6 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.util.TeleportCrystalUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void openTeleporterGUI(PlayerInteractAtEntityEvent e) {
         if(e.getHand().equals(EquipmentSlot.HAND)) {
             if(isInteractingWithTeleporter(e)) {
+                e.setCancelled(true);
                 Entity entity = e.getRightClicked();
                 Player player = e.getPlayer();
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -57,6 +59,7 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void bindCrystalToTeleporter(PlayerInteractAtEntityEvent e)  {
         if(e.getHand().equals(EquipmentSlot.HAND)) {
             if(isInteractingWithTeleporter(e)) {
+                e.setCancelled(true);
                 Player player = e.getPlayer();
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 Entity teleporterEntity = e.getRightClicked();
@@ -78,7 +81,19 @@ public class PlayerInteractAtEntityListener implements Listener {
         if(entity.getType() != EntityType.ENDER_CRYSTAL) return false;
         if(entity.getCustomName() == null) return false;
         if(entity.getCustomName().equals("")) return false;
-        return entity.isCustomNameVisible();
+        if (entity.isCustomNameVisible()) {
+            if(!plugin.getTeleportManager().getInteractBlackList().contains(player)){
+                plugin.getTeleportManager().getInteractBlackList().add(e.getPlayer());
+                plugin.getLogger().info("Added");
+                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                    plugin.getTeleportManager().getInteractBlackList().remove(e.getPlayer());
+                    plugin.getLogger().info("Removed");
+                },10);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
