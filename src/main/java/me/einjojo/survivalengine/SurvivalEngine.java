@@ -4,9 +4,11 @@ import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.command.GetCommand;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.RecipeManager;
+import me.einjojo.survivalengine.manager.TeleportManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.manager.TabListManager;
+import me.einjojo.survivalengine.util.config.TeleporterConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SurvivalEngine extends JavaPlugin {
@@ -15,6 +17,7 @@ public final class SurvivalEngine extends JavaPlugin {
 
     public RecipeManager recipeManager;
     public TabListManager tabListManager;
+    private TeleportManager teleportManager;
 
     @Override
     public void onEnable() {
@@ -23,15 +26,22 @@ public final class SurvivalEngine extends JavaPlugin {
         registerRecipes();
         registerCommands();
 
+        teleportManager.load();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        teleportManager.save();
+
+
     }
 
     public String getPREFIX() {
         return this.PREFIX;
+    }
+
+    public TeleportManager getTeleportManager() {
+        return teleportManager;
     }
 
     private void registerRecipes() {
@@ -42,6 +52,7 @@ public final class SurvivalEngine extends JavaPlugin {
     private void initClasses() {
         this.recipeManager = new RecipeManager(this);
         this.tabListManager = new TabListManager();
+        this.teleportManager = new TeleportManager(this);
     }
 
 
@@ -57,5 +68,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new PlayerDeathListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
+        new PlayerInteractAtEntityListener(this);
+        new EntityExplodeListener(this);
     }
 }

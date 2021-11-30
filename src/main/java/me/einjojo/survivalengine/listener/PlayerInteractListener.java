@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractListener implements Listener {
 
@@ -24,23 +25,18 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void placeTeleporter(PlayerInteractEvent e){
-        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-        if(e.getItem() == null) return;
-        if(!e.getItem().isSimilar(TeleporterRecipe.getItemStack())) return;
+        Player player = e.getPlayer();
         Block block = e.getClickedBlock();
+        ItemStack teleportItem = e.getItem();
+        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        if(teleportItem == null) return;
+        if(!teleportItem.isSimilar(TeleporterRecipe.getItemStack())) return;
         if(block == null) return;
         e.setCancelled(true); // Don't Place it
 
         if(e.getBlockFace().equals(BlockFace.UP)) {
-            Player player = e.getPlayer();
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
-            TeleporterPlaceEvent teleporterPlaceEvent = new TeleporterPlaceEvent(player, block);
+            TeleporterPlaceEvent teleporterPlaceEvent = new TeleporterPlaceEvent(player, block, teleportItem);
             Bukkit.getPluginManager().callEvent(teleporterPlaceEvent);
-
-            if(teleporterPlaceEvent.isCancelled()) {
-                player.getInventory().addItem(TeleporterRecipe.getItemStack());
-            }
-
         };
     }
 }

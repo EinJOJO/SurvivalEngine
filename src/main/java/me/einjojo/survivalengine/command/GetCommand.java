@@ -10,8 +10,10 @@ import org.bukkit.entity.Player;
 
 public class GetCommand implements CommandExecutor {
 
+    private final SurvivalEngine plugin;
+
     public GetCommand(SurvivalEngine plugin) {
-        plugin.getCommand("get").setExecutor(this);
+        plugin.getCommand("get").setExecutor(this); this.plugin = plugin;
     }
 
     @Override
@@ -28,6 +30,10 @@ public class GetCommand implements CommandExecutor {
                     break;
                 case "crystal":
                     p.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
+                    break;
+                case "save":
+                    plugin.getTeleportManager().save();
+                    p.sendMessage("saved.");
                     break;
             }
         }

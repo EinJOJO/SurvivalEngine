@@ -2,8 +2,10 @@ package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.events.TeleporterPlaceEvent;
+import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.PlayerChatInput;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -31,13 +33,16 @@ public class TeleporterPlaceListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            Entity teleporter = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);
-            teleporter.setCustomName("§c" + input);
-            teleporter.setCustomNameVisible(true);
+            Teleporter teleporter = new Teleporter(input, teleporterLocation, e.getPlayer().getUniqueId());
+            if(plugin.getTeleportManager().createTeleporter(teleporter)) {
+                Entity teleporterEntity = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);
+                teleporterEntity.setCustomName("§c" + input);
+                teleporterEntity.setCustomNameVisible(true);
+            } else {
+                e.setCancelled(true);
+                e.getPlayer().sendMessage(plugin.getPREFIX() + "§cDieser Name wird bereits verwendet.");
 
+            }
         });
     }
-
-
-
 }
