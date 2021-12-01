@@ -80,6 +80,7 @@ public class PlayerInteractListener implements Listener {
         player.teleport(teleporter.getLocation());
         player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 3);
         itemStack.setAmount(itemStack.getAmount() - 1);
+        plugin.getTeleportManager().getTeleporter(teleporter.getName()).setUsedCounter(teleporter.getUsedCounter() + 1);
 
 
     }
