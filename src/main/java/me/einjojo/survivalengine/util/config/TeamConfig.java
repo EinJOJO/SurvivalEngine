@@ -5,7 +5,7 @@ import me.einjojo.survivalengine.object.Team;
 
 public class TeamConfig extends ConfigFile{
 
-    protected TeamConfig(SurvivalEngine plugin) {
+    public TeamConfig(SurvivalEngine plugin) {
         super(plugin, "team.yml");
     }
 
