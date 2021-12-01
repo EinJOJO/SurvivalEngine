@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -48,6 +50,17 @@ public class TeleportManager {
     public void deleteTeleporter(Teleporter teleporter) {
         this.teleporterMap.remove(teleporter.getName());
         plugin.getLogger().log(Level.INFO,"Deleted Teleporter: " + teleporter.getName());
+    }
+
+    public void deleteTeleporter(Teleporter teleporter, Player player) {
+        List<Entity> entities = player.getNearbyEntities(7,7,7);
+        for (Entity entity : entities) {
+            if((entity.getType() == EntityType.ENDER_CRYSTAL) && (entity.getCustomName().equals("§c" + teleporter.getName()))) {
+                entity.remove();
+            }
+        }
+
+        deleteTeleporter(teleporter);
     }
 
     public void save(){

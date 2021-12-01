@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.inventory.TeleporterInventory;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.util.TeleportCrystalUtil;
@@ -43,14 +44,9 @@ public class PlayerInteractAtEntityListener implements Listener {
                     return;
                 }
 
-                if(teleporter.isActivated()) {
-                    entity.setInvulnerable(false);
-                } else {
-                    entity.setInvulnerable(true);
-                }
+                entity.setInvulnerable(!teleporter.isActivated());
 
-                Inventory inventory = player.getInventory();
-                player.openInventory(inventory);
+                new TeleporterInventory(plugin).openInventory(player, teleporter);
             }
         }
     }

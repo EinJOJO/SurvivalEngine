@@ -3,6 +3,7 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.command.GetCommand;
 import me.einjojo.survivalengine.listener.*;
+import me.einjojo.survivalengine.manager.InventoryManager;
 import me.einjojo.survivalengine.manager.RecipeManager;
 import me.einjojo.survivalengine.manager.TeleportManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
@@ -18,6 +19,7 @@ public final class SurvivalEngine extends JavaPlugin {
     public RecipeManager recipeManager;
     public TabListManager tabListManager;
     private TeleportManager teleportManager;
+    private InventoryManager inventoryManager;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,10 @@ public final class SurvivalEngine extends JavaPlugin {
         teleportManager.save();
 
 
+    }
+
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 
     public String getPREFIX() {
@@ -53,6 +59,7 @@ public final class SurvivalEngine extends JavaPlugin {
         this.recipeManager = new RecipeManager(this);
         this.tabListManager = new TabListManager();
         this.teleportManager = new TeleportManager(this);
+        this.inventoryManager = new InventoryManager();
     }
 
 
@@ -70,5 +77,6 @@ public final class SurvivalEngine extends JavaPlugin {
         new PlayerQuitListener(this);
         new PlayerInteractAtEntityListener(this);
         new EntityExplodeListener(this);
+        new InventoryClickListener(this);
     }
 }
