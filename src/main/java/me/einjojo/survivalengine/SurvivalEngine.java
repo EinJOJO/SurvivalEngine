@@ -3,13 +3,14 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.command.GetCommand;
 import me.einjojo.survivalengine.listener.*;
-import me.einjojo.survivalengine.manager.InventoryManager;
-import me.einjojo.survivalengine.manager.RecipeManager;
-import me.einjojo.survivalengine.manager.TeleportManager;
+import me.einjojo.survivalengine.manager.*;
+import me.einjojo.survivalengine.object.PlayerStats;
+import me.einjojo.survivalengine.object.SurvivalPlayer;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
-import me.einjojo.survivalengine.manager.TabListManager;
 import me.einjojo.survivalengine.util.config.TeleporterConfig;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SurvivalEngine extends JavaPlugin {
@@ -20,6 +21,7 @@ public final class SurvivalEngine extends JavaPlugin {
     public TabListManager tabListManager;
     private TeleportManager teleportManager;
     private InventoryManager inventoryManager;
+    private PlayerManager playerManager;
 
     @Override
     public void onEnable() {
@@ -28,14 +30,15 @@ public final class SurvivalEngine extends JavaPlugin {
         registerRecipes();
         registerCommands();
 
+        ConfigurationSerialization.registerClass(PlayerStats.class);
         teleportManager.load();
+        playerManager.load();
     }
 
     @Override
     public void onDisable() {
         teleportManager.save();
-
-
+        playerManager.save();
     }
 
     public InventoryManager getInventoryManager() {
@@ -60,12 +63,17 @@ public final class SurvivalEngine extends JavaPlugin {
         this.tabListManager = new TabListManager();
         this.teleportManager = new TeleportManager(this);
         this.inventoryManager = new InventoryManager();
+        this.playerManager = new PlayerManager(this);
     }
 
 
     private void registerCommands() {
         new DifficultyCommand(this);
         new GetCommand(this);
+    }
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     private void registerListeners( ) {
@@ -78,5 +86,6 @@ public final class SurvivalEngine extends JavaPlugin {
         new PlayerInteractAtEntityListener(this);
         new EntityExplodeListener(this);
         new InventoryClickListener(this);
+        new StatsListener(this);
     }
 }

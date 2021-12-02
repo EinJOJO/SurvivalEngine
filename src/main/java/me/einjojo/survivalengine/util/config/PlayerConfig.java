@@ -8,14 +8,12 @@ import java.util.UUID;
 
 public class PlayerConfig extends ConfigFile{
 
-    protected PlayerConfig(SurvivalEngine plugin) {
+    public PlayerConfig(SurvivalEngine plugin) {
         super(plugin, "player.yml");
     }
 
-    public void savePlayer(SurvivalPlayer survivalPlayer) {
-        UUID pUUID = survivalPlayer.getPlayer().getUniqueId();
-
-        getFile().set("settings." + pUUID.toString(), survivalPlayer.serialize());
+    public void savePlayer(UUID uuid, SurvivalPlayer survivalPlayer) {
+        getFile().set("player." + uuid.toString(), survivalPlayer.serialize());
         saveFile();
     }
 }

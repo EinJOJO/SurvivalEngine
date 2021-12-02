@@ -13,7 +13,7 @@ public class Teleporter implements ConfigurationSerializable {
     private final Location location;
     private int usedCounter;
     private boolean activated;
-    private UUID owner;
+    private final UUID owner;
 
     public Teleporter(String name, Location location, int usedCounter, boolean activated, UUID owner) {
         this.name = name;

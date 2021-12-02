@@ -9,7 +9,7 @@ public class TeamConfig extends ConfigFile{
         super(plugin, "team.yml");
     }
 
-    public void saveTeam(Team team) {
-        getFile().set("team." + team.getId(), team.serialize());
+    public void saveTeam(int id, Team team) {
+        getFile().set("team." + id, team.serialize());
     }
 }

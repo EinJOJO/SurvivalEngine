@@ -28,5 +28,6 @@ public class PlayerJoinListener implements Listener {
         plugin.recipeManager.loadRecipes(player);
         plugin.tabListManager.setPlayerList(player);
         plugin.tabListManager.setPlayerTeams(player);
+        plugin.getPlayerManager().createPlayer(player);
     }
 }
