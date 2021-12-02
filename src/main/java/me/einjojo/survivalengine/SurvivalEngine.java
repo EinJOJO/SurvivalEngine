@@ -8,6 +8,7 @@ import me.einjojo.survivalengine.object.PlayerStats;
 import me.einjojo.survivalengine.object.SurvivalPlayer;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
+import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
 import me.einjojo.survivalengine.util.config.TeleporterConfig;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -29,8 +30,8 @@ public final class SurvivalEngine extends JavaPlugin {
         registerListeners();
         registerRecipes();
         registerCommands();
+        registerTabComplete();
 
-        ConfigurationSerialization.registerClass(PlayerStats.class);
         teleportManager.load();
         playerManager.load();
     }
@@ -53,6 +54,7 @@ public final class SurvivalEngine extends JavaPlugin {
         return teleportManager;
     }
 
+
     private void registerRecipes() {
         new TeleportCrystalRecipe(this);
         new TeleporterRecipe(this);
@@ -70,6 +72,10 @@ public final class SurvivalEngine extends JavaPlugin {
     private void registerCommands() {
         new DifficultyCommand(this);
         new GetCommand(this);
+    }
+
+    private void registerTabComplete() {
+        new DifficultyTabComplete(this);
     }
 
     public PlayerManager getPlayerManager() {
