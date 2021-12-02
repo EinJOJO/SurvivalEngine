@@ -52,8 +52,8 @@ public class TeleportCrystalRecipe extends CustomRecipe {
     public ShapelessRecipe getRecipe () {
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe(getNamespace(), getItem());
         shapelessRecipe.addIngredient(1, Material.AMETHYST_SHARD);
-        shapelessRecipe.addIngredient(1, Material.ENDER_EYE);
-        shapelessRecipe.addIngredient(2, Material.GLOW_INK_SAC);
+        shapelessRecipe.addIngredient(1, Material.ENDER_PEARL);
+        shapelessRecipe.addIngredient(2, Material.GLOWSTONE_DUST);
 
         return shapelessRecipe;
     }
