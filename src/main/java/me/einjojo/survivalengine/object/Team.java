@@ -70,6 +70,10 @@ public class Team implements ConfigurationSerializable {
         return members;
     }
 
+    public boolean isOwner(UUID uuid) {
+        return getOwner().equals(uuid);
+    }
+
     public void addMember(UUID uuid) {
         members.add(uuid);
     }
