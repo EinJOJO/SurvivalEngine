@@ -32,7 +32,7 @@ public class GetCommand implements CommandExecutor {
                     p.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
                     break;
                 case "save":
-                    plugin.getTeleportManager().save();
+                    plugin.getTeamManager().save();
                     p.sendMessage("saved.");
                     break;
             }

@@ -9,10 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerManager {
 
@@ -34,14 +31,29 @@ public class PlayerManager {
         createPlayer(uuid, survivalPlayer);
     }
 
+
+
     private void createPlayer(UUID uuid, SurvivalPlayer player) {
         if(!this.players.containsKey(uuid)) {
             this.players.put(uuid, player);
         }
     }
 
+    public SurvivalPlayer getPlayer(String name) {
+        for (Map.Entry<UUID, SurvivalPlayer> entry : players.entrySet()) {
+            if(name.equals(entry.getValue().getName())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     public SurvivalPlayer getPlayer(UUID uuid) {
         return this.players.get(uuid);
+    }
+
+    public SurvivalPlayer getPlayer(Player player) {
+        return getPlayer(player.getUniqueId());
     }
 
 
@@ -62,11 +74,10 @@ public class PlayerManager {
 
         playerSet.forEach((player)->{
             UUID uuid = UUID.fromString(player);
-            int teamID = configurationSection.getInt(player + ".team");
             boolean hasScoreboard = (configurationSection.isBoolean(player + ".scoreboard") && configurationSection.getBoolean(player + ".scoreboard"));
             PlayerStats playerStats = loadStats(configurationSection.getConfigurationSection(player + ".stats"));
 
-            createPlayer(uuid, new SurvivalPlayer(uuid, teamID, hasScoreboard, playerStats));
+            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats));
         });
 
         plugin.getLogger().info(String.format("Loaded %d players from players.yml", this.players.size()));

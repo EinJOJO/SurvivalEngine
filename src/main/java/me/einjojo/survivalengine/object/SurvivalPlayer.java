@@ -1,6 +1,8 @@
 package me.einjojo.survivalengine.object;
 
+import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
@@ -12,38 +14,47 @@ public class SurvivalPlayer implements ConfigurationSerializable {
 
     private final UUID uuid;
     private final PlayerStats statistics;
-    private int teamID;
     private boolean scoreboardActivated;
 
 
-    public SurvivalPlayer(UUID uuid, int teamID, boolean scoreboardActivated, PlayerStats playerStats) {
+    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats) {
         this.uuid = uuid;
         this.scoreboardActivated = scoreboardActivated;
-        this.teamID = teamID;
         this.statistics = playerStats;
     }
 
     public SurvivalPlayer(Player player) {
         this.uuid = player.getUniqueId();
-        this.teamID = -1;
         this.scoreboardActivated = true;
         this.statistics = new PlayerStats(player.getUniqueId());
+    }
+
+    public OfflinePlayer getOfflinePlayer () {
+        return Bukkit.getOfflinePlayer(uuid);
+    }
+
+    public String getName() {
+        return getOfflinePlayer().getName();
     }
 
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 
-    public int getTeamID() {
-        return teamID;
+    public Team getTeam() {
+        return SurvivalEngine.getInstance().getTeamManager().getTeamByPlayer(uuid);
+    }
+
+    public void leaveTeam() {
+        getTeam().getMembers().remove(uuid);
     }
 
     public void setScoreboardActivated(boolean scoreboardActivated) {
         this.scoreboardActivated = scoreboardActivated;
     }
 
-    public void setTeam(int team) {
-        this.teamID = team;
+    public void setTeam(Team team) {
+        SurvivalEngine.getInstance().getTeamManager().addPlayerToTeam(uuid, team);
     }
 
     public boolean isScoreboardActivated() {
@@ -58,14 +69,9 @@ public class SurvivalPlayer implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         HashMap<String, Object> players = new HashMap<>();
 
-        players.put("team", teamID);
         players.put("scoreboard", isScoreboardActivated());
         players.put("stats", getStatistics().serialize());
 
         return players;
-    }
-
-    public static void deserialize(Map<String, Object> map) {
-
     }
 }

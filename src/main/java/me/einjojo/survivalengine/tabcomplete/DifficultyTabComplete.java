@@ -27,7 +27,6 @@ public class DifficultyTabComplete implements TabCompleter {
         Player player = (Player) sender;
 
         if (args.length == 1) {
-            arrayList.add("Schwierigkeit");
             arrayList.add("easy");
             arrayList.add("normal");
             arrayList.add("hard");
@@ -38,10 +37,11 @@ public class DifficultyTabComplete implements TabCompleter {
             arrayList.add("asian");
             return arrayList;
         } else if (args.length == 2) {
-            arrayList.add("Zeit");
             arrayList.add("10");
             arrayList.add("30");
             arrayList.add("60");
+
+            return arrayList;
         }
 
         return null;

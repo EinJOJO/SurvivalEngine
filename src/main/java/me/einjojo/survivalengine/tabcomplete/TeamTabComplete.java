@@ -38,11 +38,12 @@ public class TeamTabComplete implements TabCompleter {
         SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
 
         if(args.length == 1) {
-            if(survivalPlayer.getTeamID() == null) {
+            Team team = survivalPlayer.getTeam();
+            if(team == null) {
                 arrayList.add("create");
+                arrayList.add("join");
+                return arrayList;
             } else {
-                Team team = teamManager.getTeam(survivalPlayer.getTeamID());
-                if(team == null) return arrayList;
                 if(team.isOwner(player.getUniqueId())) {
                     arrayList.add("delete");
                     arrayList.add("invite");
@@ -53,8 +54,7 @@ public class TeamTabComplete implements TabCompleter {
             arrayList.add("setbase");
             arrayList.add("info");
         } else if (args.length == 2) {
-            if(survivalPlayer.getTeamID() == null) return arrayList;
-            Team team = teamManager.getTeam(survivalPlayer.getTeamID());
+            Team team = survivalPlayer.getTeam();
             if(team == null) return arrayList;
             if(team.isOwner(player.getUniqueId())) {
                 if(alias.toLowerCase().endsWith("kick")) {

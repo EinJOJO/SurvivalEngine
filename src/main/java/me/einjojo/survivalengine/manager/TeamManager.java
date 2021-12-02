@@ -3,28 +3,66 @@ package me.einjojo.survivalengine.manager;
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.Team;
 import me.einjojo.survivalengine.util.config.TeamConfig;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TeamManager {
 
-    private final Map<Integer, Team> loadedTeams;
+    private final Map<UUID, Team> TEAM_MAP;
+    private final Map<UUID, Team> PLAYER_MAP;
     private final SurvivalEngine plugin;
     private final TeamConfig config;
 
     public TeamManager(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.config = new TeamConfig(plugin);
-        this.loadedTeams = new HashMap<>();
+        this.TEAM_MAP = new HashMap<>();
+        this.PLAYER_MAP = new HashMap<>();
     }
 
+    public boolean createTeam(Team team) {
+        if(!TEAM_MAP.containsKey(team.getId())) {
+            TEAM_MAP.put(team.getId(), team);
+            for (UUID pUuid : team.getMembers()) {
+                PLAYER_MAP.put(pUuid, team);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void addPlayerToTeam(Player player, Team team) {
+        addPlayerToTeam(player.getUniqueId(), team);
+    }
+
+    public void addPlayerToTeam(UUID pUuid, Team team) {
+        if(PLAYER_MAP.containsKey(pUuid)) {
+            PLAYER_MAP.remove(pUuid);
+            addPlayerToTeam(pUuid, team);
+        } else {
+            team.getMembers().add(pUuid);
+            PLAYER_MAP.put(pUuid, team);
+        }
+    }
+
+    public Team getTeam(UUID uuid) {
+        return TEAM_MAP.get(uuid);
+    }
+
+    public Team getTeamByPlayer(UUID uuid) {
+        return PLAYER_MAP.get(uuid);
+    }
+
+    public Team getTeamByPlayer(Player player) {
+        return getTeamByPlayer(player.getUniqueId());
+    }
 
     public void save() {
-        loadedTeams.forEach(config::saveTeam);
+        TEAM_MAP.forEach(config::saveTeam);
     }
 
     public void load() {
@@ -35,7 +73,25 @@ public class TeamManager {
         Set<String> teamSet = configurationSection.getKeys(false);
 
         teamSet.forEach((team)->{
+            String teamName = configurationSection.getString(team + ".name");
+            UUID owner = UUID.fromString(configurationSection.getString(team + ".owner"));
+            Location baseLocation = configurationSection.getLocation(team + ".base");
+            List<String> membersString =  configurationSection.getStringList(team + ".members");
+            List<String> invitesString =  configurationSection.getStringList(team + ".invites");
 
+            List<UUID> members = new ArrayList<>();
+            List<UUID> invites = new ArrayList<>();
+
+            membersString.forEach((member)->{
+                members.add(UUID.fromString(member));
+            });
+
+            invitesString.forEach((invited)->{
+                invites.add(UUID.fromString(invited));
+            });
+
+            createTeam(new Team(UUID.fromString(team), members, teamName, owner, baseLocation, invites));
         });
+        plugin.getLogger().info(String.format("Loaded %d teams and %d team-players", TEAM_MAP.size(), PLAYER_MAP.size()));
     }
 }

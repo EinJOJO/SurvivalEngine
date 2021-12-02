@@ -13,5 +13,6 @@ public class TeamConfig extends ConfigFile{
 
     public void saveTeam(UUID id, Team team) {
         getFile().set("team." + id.toString(), team.serialize());
+        saveFile();
     }
 }
