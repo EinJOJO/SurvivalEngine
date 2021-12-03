@@ -2,6 +2,7 @@ package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.events.TeleporterPlaceEvent;
+import me.einjojo.survivalengine.manager.TeleportManager;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
@@ -13,7 +14,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,9 +25,11 @@ import org.bukkit.potion.PotionEffectType;
 public class PlayerInteractListener implements Listener {
 
     private final SurvivalEngine plugin;
+    private final TeleportManager teleportManager;
 
     public PlayerInteractListener(SurvivalEngine plugin) {
         this.plugin = plugin;
+        this.teleportManager = plugin.getTeleportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -55,7 +57,7 @@ public class PlayerInteractListener implements Listener {
 
         if(!e.getHand().equals(EquipmentSlot.HAND)) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
-        if(plugin.getTeleportManager().getInteractBlackList().contains(player)) return;
+        if(teleportManager.getINTERACT_BLACKLIST().contains(player)) return;
         if(itemStack == null) return;
         if(!itemStack.getItemMeta().getDisplayName().equals(TeleportCrystalRecipe.getItemStack().getItemMeta().getDisplayName())) return;
 
@@ -67,7 +69,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterName);
+        Teleporter teleporter = teleportManager.getTeleporter(teleporterName);
         if(teleporter == null) {
             player.sendMessage(plugin.getPREFIX() + "§cDer Teleporter existiert nicht mehr!");
             itemStack.setAmount(itemStack.getAmount() - 1);
@@ -76,12 +78,15 @@ public class PlayerInteractListener implements Listener {
         }
 
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2000, 255));
+
+        teleportManager.getTELEPORTING_PLAYERS().add(player);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 255));
         player.teleport(teleporter.getLocation());
         player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.5f, 3);
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         itemStack.setAmount(itemStack.getAmount() - 1);
         teleporter.setUsedCounter(teleporter.getUsedCounter() + 1);
+        teleportManager.getTELEPORTING_PLAYERS().remove(player);
     }
 
     @EventHandler

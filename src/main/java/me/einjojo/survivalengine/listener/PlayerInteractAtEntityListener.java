@@ -14,9 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractAtEntityListener implements Listener {
@@ -80,10 +78,10 @@ public class PlayerInteractAtEntityListener implements Listener {
         if(entity.getCustomName() == null) return false;
         if(entity.getCustomName().equals("")) return false;
         if (entity.isCustomNameVisible()) {
-            if(!plugin.getTeleportManager().getInteractBlackList().contains(player)){
-                plugin.getTeleportManager().getInteractBlackList().add(e.getPlayer());
+            if(!plugin.getTeleportManager().getINTERACT_BLACKLIST().contains(player)){
+                plugin.getTeleportManager().getINTERACT_BLACKLIST().add(e.getPlayer());
                 Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                    plugin.getTeleportManager().getInteractBlackList().remove(e.getPlayer());
+                    plugin.getTeleportManager().getINTERACT_BLACKLIST().remove(e.getPlayer());
                 },10);
             }
             return true;

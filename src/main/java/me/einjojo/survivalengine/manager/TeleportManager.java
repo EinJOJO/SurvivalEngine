@@ -19,14 +19,16 @@ public class TeleportManager {
     private final SurvivalEngine plugin;
     private final TeleporterConfig config;
     private final Map<String, Teleporter> TELEPORTER_MAP;
-    private final List<Player> interactBlackList;
+    private final List<Player> INTERACT_BLACKLIST;
+    private final List<Player> TELEPORTING_PLAYERS;
 
 
     public TeleportManager(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.config = new TeleporterConfig(plugin);
         this.TELEPORTER_MAP = new HashMap<>();
-        this.interactBlackList = new ArrayList<>();
+        this.INTERACT_BLACKLIST = new ArrayList<>();
+        this.TELEPORTING_PLAYERS = new ArrayList<>();
     }
 
 
@@ -37,6 +39,10 @@ public class TeleportManager {
             return true;
         }
         return false;
+    }
+
+    public List<Player> getTELEPORTING_PLAYERS() {
+        return TELEPORTING_PLAYERS;
     }
 
     public List<Teleporter> getTeleporterByPlayer(UUID playerUUID) {
@@ -53,8 +59,8 @@ public class TeleportManager {
         return TELEPORTER_MAP.get(name.substring(2));
     }
 
-    public List<Player> getInteractBlackList() {
-        return interactBlackList;
+    public List<Player> getINTERACT_BLACKLIST() {
+        return INTERACT_BLACKLIST;
     }
 
     public void deleteTeleporter(Teleporter teleporter) {
