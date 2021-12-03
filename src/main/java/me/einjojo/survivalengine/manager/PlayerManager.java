@@ -76,8 +76,9 @@ public class PlayerManager {
             UUID uuid = UUID.fromString(player);
             boolean hasScoreboard = (configurationSection.isBoolean(player + ".scoreboard") && configurationSection.getBoolean(player + ".scoreboard"));
             PlayerStats playerStats = loadStats(configurationSection.getConfigurationSection(player + ".stats"));
+            List<String> rewards = configurationSection.getStringList(player + ".rewards");
 
-            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats));
+            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats, rewards));
         });
 
         plugin.getLogger().info(String.format("Loaded %d players from players.yml", this.players.size()));

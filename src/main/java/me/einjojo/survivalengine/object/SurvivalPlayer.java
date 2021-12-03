@@ -6,27 +6,28 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SurvivalPlayer implements ConfigurationSerializable {
 
     private final UUID uuid;
     private final PlayerStats statistics;
     private boolean scoreboardActivated;
+    private final List<String> rewards;
 
 
-    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats) {
+    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards) {
         this.uuid = uuid;
         this.scoreboardActivated = scoreboardActivated;
         this.statistics = playerStats;
+        this.rewards = rewards;
     }
 
     public SurvivalPlayer(Player player) {
         this.uuid = player.getUniqueId();
         this.scoreboardActivated = true;
         this.statistics = new PlayerStats(player.getUniqueId());
+        this.rewards = new ArrayList<>();
     }
 
     public OfflinePlayer getOfflinePlayer () {
@@ -69,12 +70,25 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         return statistics;
     }
 
+    public List<String> getRewards() {
+        return rewards;
+    }
+
+    public boolean hasReward(String identifier) {
+        return getRewards().contains(identifier);
+    }
+
+    public void claimReward(String identifier) {
+        getRewards().add(identifier);
+    }
+
     @Override
     public Map<String, Object> serialize() {
         HashMap<String, Object> players = new HashMap<>();
 
         players.put("scoreboard", isScoreboardActivated());
         players.put("stats", getStatistics().serialize());
+        players.put("rewards", getRewards());
 
         return players;
     }

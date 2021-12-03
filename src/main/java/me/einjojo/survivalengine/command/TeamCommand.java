@@ -5,6 +5,8 @@ import me.einjojo.survivalengine.manager.PlayerManager;
 import me.einjojo.survivalengine.manager.TeamManager;
 import me.einjojo.survivalengine.object.SurvivalPlayer;
 import me.einjojo.survivalengine.object.Team;
+import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
+import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.PlayerChatInput;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -15,6 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.units.qual.C;
 
 import java.util.UUID;
@@ -352,6 +355,16 @@ public class TeamCommand implements CommandExecutor {
                Team newTeam = new Team(input, player.getUniqueId());
                 if(teamManager.createTeam(newTeam)) {
                     player.sendMessage(plugin.getPREFIX() + String.format("Das Team §b%s §7wurde erstellt!", input));
+
+                    if(!survivalPlayer.hasReward("first_team")) {
+                        player.sendMessage(plugin.getPREFIX()+ "§7[§6BELOHNUNG FREIGESCHALTET§7] §e§oMein erstes Team");
+                        player.sendMessage(plugin.getPREFIX() + "Du erhälst 1x §5TELEPORTER §7und 4x §dTeleport Kristall");
+                        player.getInventory().addItem(TeleporterRecipe.getItemStack());
+                        ItemStack itemStack = TeleportCrystalRecipe.getItemStack();
+                        itemStack.setAmount(4);
+                        player.getInventory().addItem(itemStack);
+                        survivalPlayer.claimReward("first_team");
+                    }
                 } else {
                     player.sendMessage(plugin.getPREFIX() + "§cEin Fehler ist aufgetreten. Versuche es erneut.");
                 };
