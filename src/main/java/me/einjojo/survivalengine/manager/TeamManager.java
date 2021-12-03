@@ -60,6 +60,14 @@ public class TeamManager {
         return TEAM_MAP.get(uuid);
     }
 
+    public void deleteTeam(Team team) {
+        if(TEAM_MAP.containsKey(team.getId())) {
+            team.getMembers().forEach((member)->{
+                PLAYER_MAP.remove(member);
+            });
+            TEAM_MAP.remove(team.getId());
+        }
+    }
 
     public Team getTeamByPlayer(UUID uuid) {
         return PLAYER_MAP.get(uuid);
@@ -72,6 +80,7 @@ public class TeamManager {
     public void save() {
         TEAM_MAP.forEach(config::saveTeam);
     }
+
 
     public void load() {
         FileConfiguration configuration = config.getFile();

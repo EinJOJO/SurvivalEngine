@@ -75,6 +75,7 @@ public class Team implements ConfigurationSerializable {
     public boolean isOwner(UUID uuid) {
         return getOwner().equals(uuid);
     }
+    public boolean isOwner(Player player) { return isOwner(player.getUniqueId()); }
 
     public List<UUID> getInvites() {
         return invites;

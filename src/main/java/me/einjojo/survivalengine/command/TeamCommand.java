@@ -20,6 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TeamCommand implements CommandExecutor {
@@ -27,11 +29,13 @@ public class TeamCommand implements CommandExecutor {
     private final SurvivalEngine plugin;
     private final PlayerManager playerManager;
     private final TeamManager teamManager;
+    private final List<Team> DELETE_TEAM;
 
     public TeamCommand(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.playerManager = plugin.getPlayerManager();
         this.teamManager = plugin.getTeamManager();
+        this.DELETE_TEAM = new ArrayList<>();
         plugin.getCommand("team").setExecutor(this);
     }
 
@@ -314,6 +318,46 @@ public class TeamCommand implements CommandExecutor {
     }
 
     private void deleteTeam(Player player) {
+        SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
+        Team team = survivalPlayer.getTeam();
+
+        if (team == null) {
+            player.sendMessage(plugin.getPREFIX() + "§cDu bist ein keinem Team.");
+            return;
+        }
+
+        if(!team.isOwner(player)) {
+            player.sendMessage(plugin.getPREFIX() + "§cNur der Inhaber kann Löschen.");
+            return;
+        }
+
+        if(DELETE_TEAM.contains(team)) {
+            DELETE_TEAM.remove(team);
+            team.getMembers().forEach((uuid)->{
+                Player member = Bukkit.getPlayer(uuid);
+                if(member != null) {
+                    member.sendMessage(plugin.getPREFIX() + "Das Team §b" + team.getName() + " §7wurde gelöscht");
+                }
+            });
+
+            teamManager.deleteTeam(team);
+        } else {
+            DELETE_TEAM.add(team);
+
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, ()->{
+                DELETE_TEAM.remove(team);
+            },20 * 30);
+
+            TextComponent line1 = new TextComponent(plugin.getPREFIX() + "Bestätige die Löschung des Teams \n");
+            TextComponent line2_1 = new TextComponent(plugin.getPREFIX());
+            TextComponent line2_2 = new TextComponent("§a[Bestätigen]");
+            line2_2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§b/team delete")));
+            line2_2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/team delete"));
+            line2_1.addExtra(line2_2);
+            line1.addExtra(line2_1);
+            player.spigot().sendMessage(line1);
+        }
+
 
     }
 
@@ -357,7 +401,7 @@ public class TeamCommand implements CommandExecutor {
                     player.sendMessage(plugin.getPREFIX() + String.format("Das Team §b%s §7wurde erstellt!", input));
 
                     if(!survivalPlayer.hasReward("first_team")) {
-                        player.sendMessage(plugin.getPREFIX()+ "§7[§6BELOHNUNG FREIGESCHALTET§7] §e§oMein erstes Team");
+                        player.sendMessage(plugin.getPREFIX()+ "§6BELOHNUNG FREIGESCHALTET§ §e§oMein erstes Team");
                         player.sendMessage(plugin.getPREFIX() + "Du erhälst 1x §5TELEPORTER §7und 4x §dTeleport Kristall");
                         player.getInventory().addItem(TeleporterRecipe.getItemStack());
                         ItemStack itemStack = TeleportCrystalRecipe.getItemStack();
