@@ -46,7 +46,11 @@ public class SurvivalPlayer implements ConfigurationSerializable {
     }
 
     public void leaveTeam() {
-        getTeam().getMembers().remove(uuid);
+        SurvivalEngine.getInstance().getTeamManager().removePlayer(uuid);
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public void setScoreboardActivated(boolean scoreboardActivated) {

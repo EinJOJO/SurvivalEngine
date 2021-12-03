@@ -49,9 +49,17 @@ public class TeamManager {
         }
     }
 
+    public void removePlayer(UUID pUuid) {
+        if(PLAYER_MAP.containsKey(pUuid)) {
+            PLAYER_MAP.get(pUuid).getMembers().remove(pUuid);
+            PLAYER_MAP.remove(pUuid);
+        }
+    }
+
     public Team getTeam(UUID uuid) {
         return TEAM_MAP.get(uuid);
     }
+
 
     public Team getTeamByPlayer(UUID uuid) {
         return PLAYER_MAP.get(uuid);

@@ -90,6 +90,11 @@ public class Team implements ConfigurationSerializable {
         members.add(uuid);
     }
 
+    public boolean isInvited(UUID player) {
+        return getInvites().contains(player);
+    }
+
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();

@@ -48,20 +48,21 @@ public class TeamTabComplete implements TabCompleter {
                     arrayList.add("delete");
                     arrayList.add("invite");
                     arrayList.add("kick");
+                } else {
+                    arrayList.add("leave");
                 }
             }
-            arrayList.add("leave");
             arrayList.add("setbase");
             arrayList.add("info");
         } else if (args.length == 2) {
             Team team = survivalPlayer.getTeam();
             if(team == null) return arrayList;
             if(team.isOwner(player.getUniqueId())) {
-                if(alias.toLowerCase().endsWith("kick")) {
+                if(args[0].toLowerCase().equals("kick")) {
                     for (UUID member : team.getMembers()) {
                         arrayList.add(Bukkit.getOfflinePlayer(member).getName());
                     }
-                } else if(alias.toLowerCase().endsWith("invite")) {
+                } else if(args[0].toLowerCase().equals("invite")) {
                     for (Player target : Bukkit.getOnlinePlayers()) {
                         arrayList.add(target.getName());
                     }
