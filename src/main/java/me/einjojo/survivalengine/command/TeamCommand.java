@@ -102,7 +102,7 @@ public class TeamCommand implements CommandExecutor {
                 TextComponent textComponent = new TextComponent(String.format("%s§f%s §7» §bMitglieder §7(§3%d§7) \n", plugin.getPREFIX(), team.getName(), team.getMembers().size()));
                 for (UUID memberUUID : team.getMembers()) {
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(memberUUID);
-                    textComponent.addExtra(" §8- §7" + offlinePlayer.getName() + "\n");
+                    textComponent.addExtra(String.format(" §8- §b%s §7(§s§7)\n", offlinePlayer.getName(), offlinePlayer.isOnline() ? "§aOnline": "§cOffline"));
                 }
                 player.spigot().sendMessage(textComponent);
                 return;
