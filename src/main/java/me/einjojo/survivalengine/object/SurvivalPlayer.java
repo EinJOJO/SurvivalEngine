@@ -82,6 +82,11 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         getRewards().add(identifier);
     }
 
+
+    public List<Teleporter> getTeleporter() {
+        return SurvivalEngine.getInstance().getTeleportManager().getTeleporterByPlayer(uuid);
+    }
+
     @Override
     public Map<String, Object> serialize() {
         HashMap<String, Object> players = new HashMap<>();

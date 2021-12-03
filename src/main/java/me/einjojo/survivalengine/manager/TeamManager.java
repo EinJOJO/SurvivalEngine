@@ -3,6 +3,7 @@ package me.einjojo.survivalengine.manager;
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.Team;
 import me.einjojo.survivalengine.util.config.TeamConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -78,6 +79,7 @@ public class TeamManager {
     }
 
     public void save() {
+        config.getFile().set("team", null);
         TEAM_MAP.forEach(config::saveTeam);
     }
 
@@ -92,9 +94,16 @@ public class TeamManager {
         teamSet.forEach((team)->{
             String teamName = configurationSection.getString(team + ".name");
             UUID owner = UUID.fromString(configurationSection.getString(team + ".owner"));
-            Location baseLocation = configurationSection.getLocation(team + ".base");
+            String baseString = configurationSection.getString(team + ".base");
             List<String> membersString =  configurationSection.getStringList(team + ".members");
             List<String> invitesString =  configurationSection.getStringList(team + ".invites");
+            Location baseLocation;
+            if(baseString.equals("null")) {
+                baseLocation = null;
+            } else {
+                String[] baseArr = baseString.split(" ");
+                 baseLocation = new Location(Bukkit.getWorld(baseArr[0]), Double.parseDouble(baseArr[1]), Double.parseDouble(baseArr[2]), Double.parseDouble(baseArr[3]));
+            }
 
             List<UUID> members = new ArrayList<>();
             List<UUID> invites = new ArrayList<>();

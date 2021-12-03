@@ -3,6 +3,7 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.DifficultyCommand;
 import me.einjojo.survivalengine.command.GetCommand;
 import me.einjojo.survivalengine.command.TeamCommand;
+import me.einjojo.survivalengine.command.TeleporterCommand;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
@@ -75,6 +76,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new DifficultyCommand(this);
         new TeamCommand(this);
         new GetCommand(this);
+        new TeleporterCommand(this);
     }
 
     private void registerTabComplete() {

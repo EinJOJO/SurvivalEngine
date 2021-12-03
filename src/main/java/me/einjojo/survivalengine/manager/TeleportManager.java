@@ -18,29 +18,39 @@ public class TeleportManager {
 
     private final SurvivalEngine plugin;
     private final TeleporterConfig config;
-    private final Map<String, Teleporter> teleporterMap;
+    private final Map<String, Teleporter> TELEPORTER_MAP;
     private final List<Player> interactBlackList;
 
 
     public TeleportManager(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.config = new TeleporterConfig(plugin);
-        this.teleporterMap = new HashMap<>();
+        this.TELEPORTER_MAP = new HashMap<>();
         this.interactBlackList = new ArrayList<>();
     }
 
 
     public boolean createTeleporter(Teleporter teleporter) {
-        if(!this.teleporterMap.containsKey(teleporter.getName())){
-            this.teleporterMap.put(teleporter.getName(), teleporter);
+        if(!this.TELEPORTER_MAP.containsKey(teleporter.getName())){
+            this.TELEPORTER_MAP.put(teleporter.getName(), teleporter);
             plugin.getLogger().log(Level.INFO, "Loaded Teleporter: " + teleporter.getName());
             return true;
         }
         return false;
     }
 
+    public List<Teleporter> getTeleporterByPlayer(UUID playerUUID) {
+        List<Teleporter> teleporterList = new ArrayList<>();
+        for(Map.Entry<String, Teleporter> entry : TELEPORTER_MAP.entrySet()){
+            if(entry.getValue().getOwner().equals(playerUUID)) {
+                teleporterList.add(entry.getValue());
+            }
+        }
+        return teleporterList;
+    }
+
     public Teleporter getTeleporter(String name) {
-        return teleporterMap.get(name.substring(2));
+        return TELEPORTER_MAP.get(name.substring(2));
     }
 
     public List<Player> getInteractBlackList() {
@@ -48,7 +58,7 @@ public class TeleportManager {
     }
 
     public void deleteTeleporter(Teleporter teleporter) {
-        this.teleporterMap.remove(teleporter.getName());
+        this.TELEPORTER_MAP.remove(teleporter.getName());
         plugin.getLogger().log(Level.INFO,"Deleted Teleporter: " + teleporter.getName());
     }
 
@@ -65,7 +75,7 @@ public class TeleportManager {
 
     public void save(){
         config.getFile().set("teleporter", null);
-        teleporterMap.forEach(config::saveTeleporter);
+        TELEPORTER_MAP.forEach(config::saveTeleporter);
         config.saveFile();
         plugin.getLogger().log(Level.INFO, "Saved all teleporters");
     }
@@ -80,7 +90,7 @@ public class TeleportManager {
             String locationString = configuration.getString("teleporter." + teleporter + ".location");
             UUID owner = UUID.fromString(configuration.getString("teleporter." + teleporter + ".owner"));
             boolean activated = configuration.isBoolean("teleporter." + teleporter + ".activated") && configuration.getBoolean("teleporter." + teleporter + ".activated");
-            int usedCounter = configuration.getInt("teleporter." + teleporter + ".location");
+            int usedCounter = configuration.getInt("teleporter." + teleporter + ".used");
 
             String[] args = locationString.split(" ");
             Location location = new Location(Bukkit.getWorld(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));

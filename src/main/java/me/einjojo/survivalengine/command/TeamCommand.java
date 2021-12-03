@@ -133,7 +133,7 @@ public class TeamCommand implements CommandExecutor {
             line6.addExtra("§cNicht gesetzt \n");
         } else {
             Location location = team.getBaseLocation();
-            line6.addExtra(String.format("§b%d %d &d \n", (int) location.getX(), (int) location.getX(), (int) location.getY() ));
+            line6.addExtra(String.format("§b%d %d %d \n", (int) location.getX(), (int) location.getX(), (int) location.getY() ));
         }
         line9.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Kopieren")));
         line9.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, team.getId().toString()));
@@ -314,7 +314,22 @@ public class TeamCommand implements CommandExecutor {
     }
 
     private void setBase(Player player) {
+        SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
+        Team team = survivalPlayer.getTeam();
 
+        if(team == null) {
+            player.sendMessage(plugin.getPREFIX() + "§cDu bist in keinem Team.");
+            return;
+        }
+
+        Location location = player.getLocation();
+        team.setBaseLocation(location);
+        team.getMembers().forEach((memberUUID) -> {
+            Player player1 = Bukkit.getPlayer(memberUUID);
+            if(player1 != null) {
+                player1.sendMessage(plugin.getPREFIX() + String.format("Die Base Location auf §b%d %d %d §7gesetzt", (int) location.getX(), (int) location.getY(), (int) location.getZ()));
+            }
+        });
     }
 
     private void deleteTeam(Player player) {
@@ -401,10 +416,10 @@ public class TeamCommand implements CommandExecutor {
                     player.sendMessage(plugin.getPREFIX() + String.format("Das Team §b%s §7wurde erstellt!", input));
 
                     if(!survivalPlayer.hasReward("first_team")) {
-                        player.sendMessage(plugin.getPREFIX()+ "§6BELOHNUNG FREIGESCHALTET§ §e§oMein erstes Team");
+                        player.sendMessage(plugin.getPREFIX()+ "§6[BELOHNUNG FREIGESCHALTET]");
                         player.sendMessage(plugin.getPREFIX() + "Du erhälst 1x §5TELEPORTER §7und 4x §dTeleport Kristall");
                         player.getInventory().addItem(TeleporterRecipe.getItemStack());
-                        ItemStack itemStack = TeleportCrystalRecipe.getItemStack();
+                        ItemStack itemStack = new ItemStack(TeleportCrystalRecipe.getItemStack());
                         itemStack.setAmount(4);
                         player.getInventory().addItem(itemStack);
                         survivalPlayer.claimReward("first_team");

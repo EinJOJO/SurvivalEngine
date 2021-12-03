@@ -109,7 +109,8 @@ public class Team implements ConfigurationSerializable {
         });
         map.put("name", getName());
         if(getBaseLocation() != null) {
-            map.put("base", getBaseLocation().serialize());
+            Location location = getBaseLocation();
+            map.put("base", String.format("%s %d %d %d", location.getWorld().getWorldFolder().getName(), (int) location.getX(), (int) location.getY(), (int) location.getZ() ));
         } else {
             map.put("base", "null");
         }
