@@ -1,14 +1,12 @@
 package me.einjojo.survivalengine;
 
-import me.einjojo.survivalengine.command.DifficultyCommand;
-import me.einjojo.survivalengine.command.GetCommand;
-import me.einjojo.survivalengine.command.TeamCommand;
-import me.einjojo.survivalengine.command.TeleporterCommand;
+import me.einjojo.survivalengine.command.*;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
+import me.einjojo.survivalengine.tabcomplete.StatsTabComplete;
 import me.einjojo.survivalengine.tabcomplete.TeamTabComplete;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -77,13 +75,15 @@ public final class SurvivalEngine extends JavaPlugin {
     private void registerCommands() {
         new DifficultyCommand(this);
         new TeamCommand(this);
-        new GetCommand(this);
+        //new GetCommand(this);
         new TeleporterCommand(this);
+        new StatsCommand(this);
     }
 
     private void registerTabComplete() {
         new DifficultyTabComplete(this);
         new TeamTabComplete(this);
+        new StatsTabComplete(this);
     }
 
     public PlayerManager getPlayerManager() {

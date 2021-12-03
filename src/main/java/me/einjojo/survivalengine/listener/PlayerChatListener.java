@@ -4,6 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.SurvivalPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -16,7 +17,7 @@ public class PlayerChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
         if(!e.isCancelled()) {
             e.setCancelled(true);

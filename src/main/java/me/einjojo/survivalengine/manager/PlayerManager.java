@@ -24,13 +24,19 @@ public class PlayerManager {
         this.players = new HashMap<>();
     }
 
+    public List<SurvivalPlayer> getPlayers() {
+        List<SurvivalPlayer> survivalPlayers = new ArrayList<>();
+        for(Map.Entry<UUID, SurvivalPlayer> entry: players.entrySet()) {
+            survivalPlayers.add(entry.getValue());
+        }
+        return survivalPlayers;
+    }
 
     public void createPlayer(Player player) {
         SurvivalPlayer survivalPlayer = new SurvivalPlayer(player);
         UUID uuid = player.getUniqueId();
         createPlayer(uuid, survivalPlayer);
     }
-
 
 
     private void createPlayer(UUID uuid, SurvivalPlayer player) {

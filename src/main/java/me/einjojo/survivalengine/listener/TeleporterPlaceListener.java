@@ -33,6 +33,13 @@ public class TeleporterPlaceListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
+
+            if(input.length() > 24) {
+                e.getPlayer().sendMessage(plugin.getPREFIX() + "§cDer Name darf nicht länger als 24 Zeichen sein.");
+                e.setCancelled(true);
+                return;
+            }
+
             Teleporter teleporter = new Teleporter(input, teleporterLocation, e.getPlayer().getUniqueId());
             if(plugin.getTeleportManager().createTeleporter(teleporter)) {
                 Entity teleporterEntity = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);

@@ -15,4 +15,5 @@ commands:
     description: Change the difficulty for a period of time
   teleporter:
     description: Zeige deine Teleporter auf.
-  get:
+  stats:
+    description: Zeige die Stats über andere Spieler

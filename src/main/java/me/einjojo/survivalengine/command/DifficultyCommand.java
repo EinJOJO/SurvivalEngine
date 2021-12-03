@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.command;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
@@ -91,12 +92,7 @@ public class DifficultyCommand implements CommandExecutor {
         player.sendMessage(plugin.getPREFIX() + "Oh nein! Ein Cooldown...");
         long time = cooldown.get(player) - System.currentTimeMillis();
 
-        long millis = time % 1000;
-        long second = (time / 1000) % 60;
-        long minute = (time / (1000 * 60)) % 60;
-        long hour = (time / (1000 * 60 * 60)) % 24;
-
-        String remaining = String.format("%02d:%02d:%02d", hour, minute, second);
+        String remaining = TextUtil.getTimeString(time);
 
         player.sendMessage(plugin.getPREFIX() + "Verbleibende Zeit: §c" + remaining);
     }
