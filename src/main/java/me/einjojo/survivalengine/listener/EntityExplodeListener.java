@@ -54,7 +54,7 @@ public class EntityExplodeListener implements Listener {
         plugin.getTeleportManager().deleteTeleporter(teleporter);
         teleportCrystal.getLocation().getWorld().createExplosion(teleportCrystal.getLocation(), 3, true, true);
         Random r = new Random();
-        if (r.nextInt(10) == 0) {
+        if (r.nextInt(10) == 4) {
             teleportCrystal.getLocation().getWorld().dropItem(teleportCrystal.getLocation(), TeleporterRecipe.getItemStack());
         }
         ;
