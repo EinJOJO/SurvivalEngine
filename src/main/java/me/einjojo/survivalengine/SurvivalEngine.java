@@ -17,12 +17,13 @@ public final class SurvivalEngine extends JavaPlugin {
     private final String PREFIX = "§7「§b§lΣNGINΣ§7」» ";
 
     private static SurvivalEngine instance;
-    public RecipeManager recipeManager;
-    public TabListManager tabListManager;
+    private RecipeManager recipeManager;
+    private TabListManager tabListManager;
     private TeleportManager teleportManager;
     private InventoryManager inventoryManager;
     private PlayerManager playerManager;
     private TeamManager teamManager;
+    private BedManager bedManager;
 
     @Override
     public void onEnable() {
@@ -64,11 +65,12 @@ public final class SurvivalEngine extends JavaPlugin {
     private void initClasses() {
         instance = this;
         this.recipeManager = new RecipeManager(this);
-        this.tabListManager = new TabListManager();
         this.teleportManager = new TeleportManager(this);
         this.inventoryManager = new InventoryManager();
         this.playerManager = new PlayerManager(this);
         this.teamManager = new TeamManager(this);
+        this.bedManager = new BedManager();
+        this.tabListManager = new TabListManager(this);
     }
 
 
@@ -99,10 +101,24 @@ public final class SurvivalEngine extends JavaPlugin {
         new EntityExplodeListener(this);
         new InventoryClickListener(this);
         new StatsListener(this);
+        new BedListener(this);
+        new PlayerChatListener(this);
     }
 
     public TeamManager getTeamManager() {
         return teamManager;
+    }
+
+    public BedManager getBedManager() {
+        return bedManager;
+    }
+
+    public RecipeManager getRecipeManager() {
+        return recipeManager;
+    }
+
+    public TabListManager getTabListManager() {
+        return tabListManager;
     }
 
     public static SurvivalEngine getInstance() {

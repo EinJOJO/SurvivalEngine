@@ -25,6 +25,10 @@ public class TeamManager {
         this.PLAYER_MAP = new HashMap<>();
     }
 
+    private void updateTabList(Player player) {
+        plugin.getTabListManager().registerTeam(player);
+    }
+
     public boolean createTeam(Team team) {
         if(!TEAM_MAP.containsKey(team.getId())) {
             TEAM_MAP.put(team.getId(), team);
@@ -48,6 +52,7 @@ public class TeamManager {
             team.getMembers().add(pUuid);
             PLAYER_MAP.put(pUuid, team);
         }
+        updateTabList(Bukkit.getPlayer(pUuid));
     }
 
     public void removePlayer(UUID pUuid) {
@@ -55,6 +60,7 @@ public class TeamManager {
             PLAYER_MAP.get(pUuid).getMembers().remove(pUuid);
             PLAYER_MAP.remove(pUuid);
         }
+        updateTabList(Bukkit.getPlayer(pUuid));
     }
 
     public Team getTeam(UUID uuid) {
@@ -64,6 +70,7 @@ public class TeamManager {
     public void deleteTeam(Team team) {
         if(TEAM_MAP.containsKey(team.getId())) {
             team.getMembers().forEach((member)->{
+                updateTabList(Bukkit.getPlayer(member));
                 PLAYER_MAP.remove(member);
             });
             TEAM_MAP.remove(team.getId());

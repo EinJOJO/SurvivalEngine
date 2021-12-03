@@ -16,17 +16,29 @@ public class BedManager {
         this.IN_BED = new ArrayList<>();
     }
 
-    private void addPlayer(Player player) {
-        if(IN_BED.contains(player)) {
+    public void addPlayer(Player player) {
+        if(!IN_BED.contains(player)) {
             IN_BED.add(player);
         }
+        check();
     }
 
-    private void removePlayer(Player player) {
+    public void removePlayer(Player player) {
         IN_BED.remove(player);
+        check();
     }
 
     private int getOnlinePlayers() {
         return Bukkit.getServer().getOnlinePlayers().size();
+    }
+
+    public void check() {
+        if(IN_BED.size() >= getOnlinePlayers() / 2) {
+            Bukkit.getServer().getWorlds().forEach((world -> {
+                world.setThundering(false);
+                world.setStorm(false);
+                world.setTime(0);
+            }));
+        }
     }
 }

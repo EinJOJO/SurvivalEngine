@@ -18,7 +18,7 @@ public class TeleportCrystalRecipe extends CustomRecipe {
 
     public TeleportCrystalRecipe(SurvivalEngine plugin) {
         super(NamespacedKey.minecraft("teleport_crystal"));
-        plugin.recipeManager.addRecipe(this);
+        plugin.getRecipeManager().addRecipe(this);
     }
 
     @Override

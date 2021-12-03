@@ -25,9 +25,9 @@ public class PlayerJoinListener implements Listener {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player.sendTitle("§b§lWillkommen!", "", 25, 50, 25);
 
-        plugin.recipeManager.loadRecipes(player);
-        plugin.tabListManager.setPlayerList(player);
-        plugin.tabListManager.setPlayerTeams(player);
         plugin.getPlayerManager().createPlayer(player);
+        plugin.getRecipeManager().loadRecipes(player);
+        plugin.getTabListManager().setPlayerList(player);
+        plugin.getTabListManager().registerTeam(player);
     }
 }

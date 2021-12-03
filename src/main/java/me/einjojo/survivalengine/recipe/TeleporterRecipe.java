@@ -18,7 +18,7 @@ public class TeleporterRecipe extends CustomRecipe {
 
     public TeleporterRecipe (SurvivalEngine plugin) {
         super(NamespacedKey.minecraft("teleporter"));
-        plugin.recipeManager.addRecipe(this);
+        plugin.getRecipeManager().addRecipe(this);
     }
 
     public static ItemStack getItemStack() {

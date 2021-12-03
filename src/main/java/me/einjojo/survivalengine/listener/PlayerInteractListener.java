@@ -82,7 +82,12 @@ public class PlayerInteractListener implements Listener {
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         itemStack.setAmount(itemStack.getAmount() - 1);
         teleporter.setUsedCounter(teleporter.getUsedCounter() + 1);
+    }
 
-
+    @EventHandler
+    public void onEnderEyeThrow(PlayerInteractEvent e) {
+        if(e.getItem() == null) return;
+        if(!e.getItem().getType().equals(Material.ENDER_EYE)) return;
+        e.setCancelled(true);
     }
 }

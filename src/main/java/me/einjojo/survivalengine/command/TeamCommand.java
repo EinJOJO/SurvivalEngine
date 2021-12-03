@@ -407,6 +407,10 @@ public class TeamCommand implements CommandExecutor {
                 if(input == null) {
                     return;
                 }
+                if(input.length() < 4) {
+                    player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht kürzer als 4 Zeichen sein.");
+                    return;
+                }
                 if(input.length() > 14) {
                     player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht länger als 14 Zeichen sein.");
                     return;
