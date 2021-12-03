@@ -76,9 +76,10 @@ public class PlayerInteractListener implements Listener {
         }
 
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 255));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2000, 255));
         player.teleport(teleporter.getLocation());
-        player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 1, 3);
+        player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.5f, 3);
+        player.removePotionEffect(PotionEffectType.BLINDNESS);
         itemStack.setAmount(itemStack.getAmount() - 1);
         teleporter.setUsedCounter(teleporter.getUsedCounter() + 1);
 

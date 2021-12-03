@@ -4,6 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.inventory.TeleporterInventory;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
+import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.TeleportCrystalUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -39,7 +40,8 @@ public class PlayerInteractAtEntityListener implements Listener {
                 Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterName);
                 if(itemStack.isSimilar(TeleportCrystalRecipe.getItemStack())) return;
                 if(teleporter == null) {
-                    player.sendMessage(plugin.getPREFIX() + "Der Teleporter war nicht gültig und wurde entfernt");
+                    player.sendMessage(plugin.getPREFIX() + "Fehlerhafter Teleporter wurde entfernt");
+                    player.getInventory().addItem(TeleporterRecipe.getItemStack());
                     entity.remove();
                     return;
                 }
@@ -80,10 +82,8 @@ public class PlayerInteractAtEntityListener implements Listener {
         if (entity.isCustomNameVisible()) {
             if(!plugin.getTeleportManager().getInteractBlackList().contains(player)){
                 plugin.getTeleportManager().getInteractBlackList().add(e.getPlayer());
-                plugin.getLogger().info("Added");
                 Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                     plugin.getTeleportManager().getInteractBlackList().remove(e.getPlayer());
-                    plugin.getLogger().info("Removed");
                 },10);
             }
             return true;
