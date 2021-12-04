@@ -28,11 +28,6 @@ public class TeleporterInventory {
         return name;
     }
 
-    public TeleporterInventory(SurvivalEngine plugin, InventoryManager inventoryManager) {
-        this.plugin = plugin;
-        this.inventoryManager = inventoryManager;
-    }
-
 
     public Inventory getInventory(Player player, Teleporter teleporter) {
         Inventory inventory = Bukkit.getServer().createInventory(null, 54, name);
@@ -42,6 +37,8 @@ public class TeleporterInventory {
         lore.add("§7Platziere deinen §5Teleport");
         lore.add("§5Kristall §7hier rein, um");
         lore.add("§7ihn zurückzusetzten");
+        lore.add("");
+        lore.add("§4FEHLERHAFT: §7Nutze §b/fix §7alternativ");
         inventoryManager.addItemStack(inventory, new ItemStack(Material.FLOWER_POT),  31, "§6Disbinder", lore);
         addInformationItem(inventory, teleporter, 13);
         if(player.getUniqueId().equals(teleporter.getOwner())) {

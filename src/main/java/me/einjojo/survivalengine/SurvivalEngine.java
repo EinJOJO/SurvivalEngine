@@ -84,6 +84,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new DifficultyTabComplete(this);
         new TeamTabComplete(this);
         new StatsTabComplete(this);
+        new FixCommand(this);
     }
 
     public PlayerManager getPlayerManager() {
