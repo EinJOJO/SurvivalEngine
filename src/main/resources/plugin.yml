@@ -17,3 +17,5 @@ commands:
     description: Zeige deine Teleporter auf.
   stats:
     description: Zeige die Stats über andere Spieler
+  fix:
+    description: Repariere kaputte Kristalle

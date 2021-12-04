@@ -6,7 +6,7 @@
 
     <groupId>me.einjojo</groupId>
     <artifactId>survival-engine</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>Survival Engine</name>

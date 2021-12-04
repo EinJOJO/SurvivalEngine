@@ -20,14 +20,17 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        e.setJoinMessage(plugin.getPREFIX() + "§e" + player.getName() + "§7 hat den Server §abetreten");
-        player.resetTitle();
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-        player.sendTitle("§b§lWillkommen!", "", 25, 50, 25);
-
         plugin.getPlayerManager().createPlayer(player);
         plugin.getRecipeManager().loadRecipes(player);
         plugin.getTabListManager().setPlayerList(player);
         plugin.getTabListManager().registerTeam(player);
+
+        e.setJoinMessage(plugin.getPREFIX() + "§e" + player.getName() + "§7 hat den Server §abetreten");
+        player.resetTitle();
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+        player.sendTitle("§b§lWillkommen!", "", 15, 20, 15);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
+            player.sendTitle("§c§lChunks werden geladen!", "§7Während des Prozesses bist du im Void, also keine Sorge.", 20, 30, 20);
+        }, 50);
     }
 }

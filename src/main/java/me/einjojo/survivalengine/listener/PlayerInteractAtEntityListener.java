@@ -7,6 +7,7 @@ import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.TeleportCrystalUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class PlayerInteractAtEntityListener implements Listener {
 
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
+    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void openTeleporterGUI(PlayerInteractAtEntityEvent e) {
         if(e.getHand().equals(EquipmentSlot.HAND)) {
             if(isInteractingWithTeleporter(e)) {
@@ -45,13 +46,14 @@ public class PlayerInteractAtEntityListener implements Listener {
                 }
 
                 entity.setInvulnerable(!teleporter.isActivated());
+                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.5F, 1);
 
                 new TeleporterInventory(plugin).openInventory(player, teleporter);
             }
         }
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void bindCrystalToTeleporter(PlayerInteractAtEntityEvent e)  {
         if(e.getHand().equals(EquipmentSlot.HAND)) {
             if(isInteractingWithTeleporter(e)) {
@@ -59,13 +61,17 @@ public class PlayerInteractAtEntityListener implements Listener {
                 Player player = e.getPlayer();
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 Entity teleporterEntity = e.getRightClicked();
-                if(!itemStack.isSimilar(TeleportCrystalRecipe.getItemStack())) return;
+                if(!itemStack.isSimilar(TeleportCrystalRecipe.getItemStack())) {
+                    e.setCancelled(false);
+                    return;
+                }
 
                 Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterEntity.getName());
                 TeleportCrystalUtil crystalUtil = new TeleportCrystalUtil();
                 ItemStack boundCrystal = crystalUtil.bind(itemStack, teleporter);
 
                 player.sendMessage(plugin.getPREFIX() + "Der Kristall wurde an §c" + teleporter.getName() + " §7gebunden.");
+                player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
             }
         }
     }
@@ -82,7 +88,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                 plugin.getTeleportManager().getINTERACT_BLACKLIST().add(e.getPlayer());
                 Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                     plugin.getTeleportManager().getINTERACT_BLACKLIST().remove(e.getPlayer());
-                },10);
+                },10L);
             }
             return true;
         } else {
