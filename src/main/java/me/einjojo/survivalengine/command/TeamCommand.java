@@ -119,9 +119,12 @@ public class TeamCommand implements CommandExecutor {
             return;
         }
 
+        args[0] = "";
+
         StringBuilder stringBuilder = new StringBuilder();
         for (String snippet : args) {
             stringBuilder.append(snippet);
+            stringBuilder.append(" ");
         }
 
         String message = TextUtil.toTeamChat(player.getName(), stringBuilder.toString());
