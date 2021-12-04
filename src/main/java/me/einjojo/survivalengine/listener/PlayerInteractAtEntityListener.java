@@ -67,6 +67,14 @@ public class PlayerInteractAtEntityListener implements Listener {
                 }
 
                 Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterEntity.getName());
+
+                if(teleporter == null) {
+                    player.sendMessage(plugin.getPREFIX() + "Fehlerhafter Teleporter wurde entfernt");
+                    player.getInventory().addItem(TeleporterRecipe.getItemStack());
+                    teleporterEntity.remove();
+                    return;
+                }
+
                 TeleportCrystalUtil crystalUtil = new TeleportCrystalUtil();
                 ItemStack boundCrystal = crystalUtil.bind(itemStack, teleporter);
 
