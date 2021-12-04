@@ -38,6 +38,7 @@ public class PlayerInteractListener implements Listener {
         Player player = e.getPlayer();
         Block block = e.getClickedBlock();
         ItemStack teleportItem = e.getItem();
+        if(e.getHand() == null) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if(teleportItem == null) return;
         if(!teleportItem.isSimilar(TeleporterRecipe.getItemStack())) return;
@@ -55,6 +56,7 @@ public class PlayerInteractListener implements Listener {
         Player player = e.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
+        if(e.getHand() == null) return;
         if(!e.getHand().equals(EquipmentSlot.HAND)) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         if(teleportManager.getINTERACT_BLACKLIST().contains(player)) return;
@@ -91,6 +93,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onEnderEyeThrow(PlayerInteractEvent e) {
+        if(e.getHand() == null) return;
         if(e.getItem() == null) return;
         if(!e.getItem().getType().equals(Material.ENDER_EYE)) return;
         e.setCancelled(true);

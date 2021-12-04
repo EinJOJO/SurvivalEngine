@@ -5,8 +5,6 @@ import me.einjojo.survivalengine.manager.PlayerManager;
 import me.einjojo.survivalengine.object.SurvivalPlayer;
 import me.einjojo.survivalengine.util.TextUtil;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -67,19 +65,8 @@ public class StatsCommand implements CommandExecutor {
         TextComponent line9 = new TextComponent(PREFIX + String.format("§fSpielzeit: §b%s \n", TextUtil.getTimeString(player.getOfflinePlayer().getStatistic(Statistic.TOTAL_WORLD_TIME))));
         TextComponent line10 = new TextComponent("§7\n");
 
-        line9.addExtra(line10);
-        line8.addExtra(line9);
-        line7.addExtra(line8);
-        line6.addExtra(line7);
-        line5.addExtra(line6);
-        line4.addExtra(line5);
-        line3_1.addExtra(line4);
-        line3.addExtra(line3_1);
-        line2.addExtra(line3);
-        line1.addExtra(line2);
-        line0.addExtra(line1);
 
-        return line0;
+        return TextUtil.combineTextComponents(line0,line1,line2,line3,line3_1,line4,line5,line6,line7,line8,line9,line10);
     }
 
 

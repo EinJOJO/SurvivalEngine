@@ -19,3 +19,5 @@ commands:
     description: Zeige die Stats über andere Spieler
   fix:
     description: Repariere kaputte Kristalle
+  waypoint:
+    description: Waypoint Management
