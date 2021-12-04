@@ -113,7 +113,14 @@ public class TeamCommand implements CommandExecutor {
                 TextComponent textComponent = new TextComponent(String.format("%s§f%s §7» §bMitglieder §7(§3%d§7) \n", plugin.getPREFIX(), team.getName(), team.getMembers().size()));
                 for (UUID memberUUID : team.getMembers()) {
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(memberUUID);
-                    textComponent.addExtra(String.format(" §8- §b%s §7(%s§7)\n", offlinePlayer.getName(), ((offlinePlayer.isOnline()) ? "§aOnline": "§cOffline")));
+                    TextComponent userComponent = new TextComponent(String.format(" §8- §b%s §7(%s§7)\n", offlinePlayer.getName(), ((offlinePlayer.isOnline()) ? "§aOnline": "§cOffline")));
+                    if(offlinePlayer.getPlayer() != null) {
+                        Player oPlayer = offlinePlayer.getPlayer();
+                        Location loc = oPlayer.getLocation();
+
+                        userComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§eHP: §f%f, §eLevel: §f%d, §ePosition: §f%d %d %d", oPlayer.getHealth(), oPlayer.getLevel(), (int) loc.getX(), (int) loc.getY(), (int) loc.getZ()))));
+                    }
+                    textComponent.addExtra(userComponent);
                 }
                 player.spigot().sendMessage(textComponent);
                 return;
@@ -276,12 +283,13 @@ public class TeamCommand implements CommandExecutor {
         TextComponent line6 = createUsageComponent(player, "/team create", " §8» §7Erstelle dein eigenes Team", "/team create", "§b/team create");
         TextComponent line7 = createUsageComponent(player, "/team join <ID>", " §8» §7Trete einem Team bei", "/team join", "bsp: §b/team join 0a00f59b-9f84-4dfe-8163-d71a3e7bd90a");
         TextComponent line8 = createUsageComponent(player, "/team invite <Spieler>", " §8» §7Lade einen Spieler ein", "/team invite ", "bsp: §b/team invite Ein_Jojo");
-        TextComponent line9 = createUsageComponent(player, "/team setbase", " §8» §7Setze die Hauptbase auf die aktuelle Position", "/team setbase", "§b/team setbase");
+        TextComponent line9 = createUsageComponent(player, "/team setbase", " §8» §7Setze die Base auf deine Position", "/team setbase", "§b/team setbase");
         TextComponent line10 = createUsageComponent(player, "/team kick <Spieler>", " §8» §7Schmeiße jemanden aus deinem Team raus", "/team kick ", "bsp: §b/team kick Ein_Jojo");
+        TextComponent line10_1 = createUsageComponent(player, "/team delete", " §8» §7Lösche dein jetziges Team", "/team delete", "§b/team delete");
         TextComponent line11 = createUsageComponent(player, "/team leave", " §8» §7Verlasse dein jetziges Team", "/team leave", "§b/team leave");
         TextComponent line12 = new TextComponent("§7§m----------------------------------------------------");
 
-        TextComponent text = TextUtil.combineTextComponents(line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12);
+        TextComponent text = TextUtil.combineTextComponents(line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line10_1,line11,line12);
 
         player.spigot().sendMessage(text);
     }
