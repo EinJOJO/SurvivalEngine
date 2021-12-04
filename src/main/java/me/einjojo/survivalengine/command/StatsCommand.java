@@ -52,7 +52,7 @@ public class StatsCommand implements CommandExecutor {
     }
 
     private TextComponent getPlayerStats(SurvivalPlayer player) {
-        TextComponent line0 = new TextComponent("§7\n");
+        TextComponent line0 = new TextComponent("§7-------------------------------------\n");
         TextComponent line1 = new TextComponent(PREFIX + "§fStatistiken von §e" + player.getName() + "\n");
         TextComponent line2 = new TextComponent(PREFIX + String.format("§fSpieler Kills: §b%d  \n", player.getStatistics().getPlayerKills()));
         TextComponent line3 = new TextComponent(PREFIX + String.format("§fMob Kills: §b%d  \n", player.getStatistics().getMobKills()));
@@ -60,10 +60,11 @@ public class StatsCommand implements CommandExecutor {
         TextComponent line4 = new TextComponent(PREFIX + String.format("§fTode : §b%d  \n", player.getStatistics().getDeaths()));
         TextComponent line5 = new TextComponent(PREFIX + String.format("§fBlöcke abgebaut: §b%d  \n", player.getStatistics().getBlocksDestroyed()));
         TextComponent line6 = new TextComponent(PREFIX + String.format("§fBlöcke platziert: §b%d  \n", player.getStatistics().getBlocksPlaced()));
+        TextComponent line6_1 = new TextComponent(PREFIX + String.format("§fVilliger Trades: §b%d \n", player.getOfflinePlayer().getStatistic(Statistic.TRADED_WITH_VILLAGER)));
         TextComponent line7 = new TextComponent("§7\n");
         TextComponent line8 = new TextComponent(PREFIX + String.format("§fZuletzt gestorben vor: §b%s \n", TextUtil.getTimeString(player.getOfflinePlayer().getStatistic(Statistic.TIME_SINCE_DEATH))));
         TextComponent line9 = new TextComponent(PREFIX + String.format("§fSpielzeit: §b%s \n", TextUtil.getTimeString(player.getOfflinePlayer().getStatistic(Statistic.TOTAL_WORLD_TIME))));
-        TextComponent line10 = new TextComponent("§7\n");
+        TextComponent line10 = new TextComponent("§7-------------------------------------\n");
 
 
         return TextUtil.combineTextComponents(line0,line1,line2,line3,line3_1,line4,line5,line6,line7,line8,line9,line10);

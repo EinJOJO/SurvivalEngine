@@ -31,7 +31,7 @@ public class PlayerChatInput implements Listener {
         this.taskID = new BukkitRunnable() {
             @Override
             public void run() {
-                player.sendTitle(title, "§7Gib §ccancel §7ein, um abzubrechen", 0, 25 ,0);
+                player.sendTitle(title, "§7Schreibe §ccancel §7in den Chat, um abzubrechen", 0, 25 ,0);
             }
         }.runTaskTimer(plugin, 0, 20);
 
