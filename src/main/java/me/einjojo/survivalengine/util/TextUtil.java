@@ -46,4 +46,8 @@ public class TextUtil {
         return TEXT;
     }
 
+    public static String toTeamChat(String senderName, String message) {
+        return String.format("§7[§cTeamchat§7] §e%s §8» §7%s", senderName, message);
+    }
+
 }

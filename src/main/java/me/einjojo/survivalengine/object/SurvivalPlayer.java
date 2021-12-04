@@ -14,13 +14,15 @@ public class SurvivalPlayer implements ConfigurationSerializable {
     private final PlayerStats statistics;
     private boolean scoreboardActivated;
     private final List<String> rewards;
+    private boolean teamChat;
 
 
-    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards) {
+    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards, boolean teamChat) {
         this.uuid = uuid;
         this.scoreboardActivated = scoreboardActivated;
         this.statistics = playerStats;
         this.rewards = rewards;
+        this.teamChat = teamChat;
     }
 
     public SurvivalPlayer(Player player) {
@@ -28,6 +30,7 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         this.scoreboardActivated = true;
         this.statistics = new PlayerStats(player.getUniqueId());
         this.rewards = new ArrayList<>();
+        this.teamChat = false;
     }
 
     public OfflinePlayer getOfflinePlayer () {
@@ -82,6 +85,13 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         getRewards().add(identifier);
     }
 
+    public boolean isTeamChat() {
+        return teamChat;
+    }
+
+    public void setTeamChat(boolean teamChat) {
+        this.teamChat = teamChat;
+    }
 
     public List<Teleporter> getTeleporter() {
         return SurvivalEngine.getInstance().getTeleportManager().getTeleporterByPlayer(uuid);
@@ -94,6 +104,7 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         players.put("scoreboard", isScoreboardActivated());
         players.put("stats", getStatistics().serialize());
         players.put("rewards", getRewards());
+        players.put("teamchat", isTeamChat());
 
         return players;
     }

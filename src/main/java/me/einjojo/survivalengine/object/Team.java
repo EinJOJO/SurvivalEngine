@@ -95,6 +95,15 @@ public class Team implements ConfigurationSerializable {
         return getInvites().contains(player);
     }
 
+    public void chat(String message) {
+        getMembers().forEach((memberUUID) -> {
+            Player target = Bukkit.getPlayer(memberUUID);
+            if(target != null) {
+                target.sendMessage(message);
+            }
+        });
+    }
+
 
     @Override
     public Map<String, Object> serialize() {

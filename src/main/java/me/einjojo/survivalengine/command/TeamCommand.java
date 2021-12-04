@@ -52,6 +52,10 @@ public class TeamCommand implements CommandExecutor {
         }
 
         switch (args[0].toLowerCase()) {
+            case "c":
+            case "chat":
+                chat(player, args);
+                break;
             case "leave":
                 leaveTeam(player);
                 break;
@@ -99,6 +103,32 @@ public class TeamCommand implements CommandExecutor {
         return true;
     }
 
+    private void chat(Player player, String[] args) {
+
+        SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
+        Team team = survivalPlayer.getTeam();
+
+        if(team == null) {
+            player.sendMessage(plugin.getPREFIX() + "§cDu bist in keinem Team.");
+            return;
+        }
+
+        if(args.length == 1) {
+            survivalPlayer.setTeamChat(!survivalPlayer.isTeamChat());
+            player.sendMessage(plugin.getPREFIX() + "Der Chat wurde auf den " + (survivalPlayer.isTeamChat() ? "§cTeamchat" : "§eGlobalenchat") + " §7umgestellt.");
+            return;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String snippet : args) {
+            stringBuilder.append(snippet);
+        }
+
+        String message = TextUtil.toTeamChat(player.getName(), stringBuilder.toString());
+
+        team.chat(message);
+    }
+
 
     private void sendInfo(Player player, String[] args) {
         SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
@@ -118,7 +148,7 @@ public class TeamCommand implements CommandExecutor {
                         Player oPlayer = offlinePlayer.getPlayer();
                         Location loc = oPlayer.getLocation();
 
-                        userComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§eHP: §f%f, §eLevel: §f%d, §ePosition: §f%d %d %d", oPlayer.getHealth(), oPlayer.getLevel(), (int) loc.getX(), (int) loc.getY(), (int) loc.getZ()))));
+                        userComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§eHP: §f%d\n §eLevel: §f%d\n §ePosition: §f%d %d %d", (int) oPlayer.getHealth(), oPlayer.getLevel(), (int) loc.getX(), (int) loc.getY(), (int) loc.getZ()))));
                     }
                     textComponent.addExtra(userComponent);
                 }
@@ -282,12 +312,14 @@ public class TeamCommand implements CommandExecutor {
         TextComponent line5 = createUsageComponent(player, "/team info", " §8» §7Zeige Informationen über dein Team an", "/team info", "§b/team info");
         TextComponent line6 = createUsageComponent(player, "/team create", " §8» §7Erstelle dein eigenes Team", "/team create", "§b/team create");
         TextComponent line7 = createUsageComponent(player, "/team join <ID>", " §8» §7Trete einem Team bei", "/team join", "bsp: §b/team join 0a00f59b-9f84-4dfe-8163-d71a3e7bd90a");
-        TextComponent line8 = createUsageComponent(player, "/team invite <Spieler>", " §8» §7Lade einen Spieler ein", "/team invite ", "bsp: §b/team invite Ein_Jojo");
+        TextComponent line8 = createUsageComponent(player, "/team invite <Spieler>", " §8» §7Lade einen Spieler ein", "/team invite ", "z.B §b/team invite Ein_Jojo");
         TextComponent line9 = createUsageComponent(player, "/team setbase", " §8» §7Setze die Base auf deine Position", "/team setbase", "§b/team setbase");
-        TextComponent line10 = createUsageComponent(player, "/team kick <Spieler>", " §8» §7Schmeiße jemanden aus deinem Team raus", "/team kick ", "bsp: §b/team kick Ein_Jojo");
+        TextComponent line10 = createUsageComponent(player, "/team kick <Spieler>", " §8» §7Schmeiße jemanden aus deinem Team raus", "/team kick ", "z.B §b/team kick Ein_Jojo");
         TextComponent line10_1 = createUsageComponent(player, "/team delete", " §8» §7Lösche dein jetziges Team", "/team delete", "§b/team delete");
         TextComponent line11 = createUsageComponent(player, "/team leave", " §8» §7Verlasse dein jetziges Team", "/team leave", "§b/team leave");
-        TextComponent line12 = new TextComponent("§7§m----------------------------------------------------");
+        TextComponent line12 = createUsageComponent(player, "/team chat", " §8» §7Schalte den Chat auf den Teamchat um", "/team chat", "/team chat");
+        TextComponent line13 = createUsageComponent(player, "/team chat <Nachricht>", "§8» §7Schreibe im Teamchat", "/team chat ", "z.B /team chat Bla bla bla");
+        TextComponent line14 = new TextComponent("§7§m----------------------------------------------------");
 
         TextComponent text = TextUtil.combineTextComponents(line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line10_1,line11,line12);
 

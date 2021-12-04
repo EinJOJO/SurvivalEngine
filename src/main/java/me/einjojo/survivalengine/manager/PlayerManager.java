@@ -83,8 +83,9 @@ public class PlayerManager {
             boolean hasScoreboard = (configurationSection.isBoolean(player + ".scoreboard") && configurationSection.getBoolean(player + ".scoreboard"));
             PlayerStats playerStats = loadStats(configurationSection.getConfigurationSection(player + ".stats"));
             List<String> rewards = configurationSection.getStringList(player + ".rewards");
+            boolean teamChat = configurationSection.getBoolean(player + ".teamchat");
 
-            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats, rewards));
+            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats, rewards, teamChat));
         });
 
         plugin.getLogger().info(String.format("Loaded %d players from players.yml", this.players.size()));

@@ -26,8 +26,8 @@ public class TabListManager {
     }
 
     public void setPlayerList(Player player) {
-        player.setPlayerListHeaderFooter("§b§lSURVIVAL V2\n","\n§7Powered by the §fSurvivalEngine§oV2 \n " +
-                "§3/difficulty /team /teleporter");
+        player.setPlayerListHeaderFooter("§b§lSURVIVAL V2\n","\n§7Powered by the §fSurvivalEngine§o2.5 \n " +
+                "§3/difficulty /team /teleporter /stats");
     }
 
 

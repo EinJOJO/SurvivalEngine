@@ -52,6 +52,8 @@ public class TeamTabComplete implements TabCompleter {
                     arrayList.add("leave");
                 }
             }
+            arrayList.add("chat");
+            arrayList.add("c");
             arrayList.add("setbase");
             arrayList.add("info");
         } else if (args.length == 2) {
