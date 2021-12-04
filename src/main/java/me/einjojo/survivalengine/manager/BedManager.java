@@ -36,9 +36,11 @@ public class BedManager {
 
     public void check() {
         for (Player player : IN_BED) {
+            player.resetTitle();
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7Spieler in Bett: §c" + IN_BED.size() + "§f/§c" + getOnlinePlayers() / 2));
         }
         if(IN_BED.size() >= getOnlinePlayers() / 2) {
+            Bukkit.broadcastMessage(SurvivalEngine.getInstance().getPREFIX() + "Es wird Tag, da die Hälfte schlief.");
             Bukkit.getServer().getWorlds().forEach((world -> {
                 world.setThundering(false);
                 world.setStorm(false);

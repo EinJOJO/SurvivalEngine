@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TeamTabComplete implements TabCompleter {
+public class TeamTabComplete extends ArgumentSorter implements TabCompleter  {
 
     private final PlayerManager playerManager;
     private final TeamManager teamManager;
@@ -62,11 +62,11 @@ public class TeamTabComplete implements TabCompleter {
             if(team.isOwner(player.getUniqueId())) {
                 if(args[0].toLowerCase().equals("kick")) {
                     for (UUID member : team.getMembers()) {
-                        arrayList.add(Bukkit.getOfflinePlayer(member).getName());
+                        addArgument(args[1], Bukkit.getOfflinePlayer(member).getName(), arrayList);
                     }
                 } else if(args[0].toLowerCase().equals("invite")) {
                     for (Player target : Bukkit.getOnlinePlayers()) {
-                        arrayList.add(target.getName());
+                        addArgument(args[1], target.getName(), arrayList);
                     }
                 }
             }

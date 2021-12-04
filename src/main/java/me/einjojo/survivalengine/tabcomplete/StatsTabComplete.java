@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatsTabComplete implements TabCompleter {
+public class StatsTabComplete extends ArgumentSorter implements TabCompleter {
 
 
     private final PlayerManager playerManager;
@@ -21,11 +21,11 @@ public class StatsTabComplete implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> arraylist = new ArrayList<>();
+        ArrayList<String> arraylist = new ArrayList<>();
 
         if(args.length == 1) {
             playerManager.getPlayers().forEach((player) -> {
-                arraylist.add(player.getName());
+                addArgument(args[0], player.getName(), arraylist);
             });
         }
 

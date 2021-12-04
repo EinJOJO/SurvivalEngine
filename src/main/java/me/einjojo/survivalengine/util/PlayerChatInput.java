@@ -28,6 +28,7 @@ public class PlayerChatInput implements Listener {
     public PlayerChatInput(SurvivalEngine plugin, Player player, String title, Runnable callback) {
         this.plugin = plugin;
 
+        player.resetTitle();
         this.taskID = new BukkitRunnable() {
             @Override
             public void run() {
