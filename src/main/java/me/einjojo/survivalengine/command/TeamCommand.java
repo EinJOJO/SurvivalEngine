@@ -8,6 +8,7 @@ import me.einjojo.survivalengine.object.Team;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.PlayerChatInput;
+import me.einjojo.survivalengine.util.TextUtil;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
@@ -18,7 +19,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,11 @@ public class TeamCommand implements CommandExecutor {
                 leaveTeam(player);
                 break;
             case "create":
-                createTeam(player);
+                if(args.length == 2) {
+                    createTeam(player, args[1]);
+                } else {
+                    createTeamDialog(player);
+                }
                 break;
             case "delete":
                 deleteTeam(player);
@@ -138,17 +142,9 @@ public class TeamCommand implements CommandExecutor {
         line9.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Kopieren")));
         line9.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, team.getId().toString()));
 
-        line9.addExtra(line10);
-        line8.addExtra(line9);
-        line7.addExtra(line8);
-        line6.addExtra(line7);
-        line5.addExtra(line6);
-        line4.addExtra(line5);
-        line3.addExtra(line4);
-        line2.addExtra(line3);
-        line1.addExtra(line2);
+        TextComponent text = TextUtil.combineTextComponents(line1,line2,line3,line4,line5,line6,line7,line8,line9,line10);
 
-        player.spigot().sendMessage(line1);
+        player.spigot().sendMessage(text);
 
     }
 
@@ -285,32 +281,13 @@ public class TeamCommand implements CommandExecutor {
         TextComponent line11 = createUsageComponent(player, "/team leave", " §8» §7Verlasse dein jetziges Team", "/team leave", "§b/team leave");
         TextComponent line12 = new TextComponent("§7§m----------------------------------------------------");
 
-        line11.addExtra(line12);
-        line10.addExtra(line11);
-        line9.addExtra(line10);
-        line8.addExtra(line9);
-        line7.addExtra(line8);
-        line6.addExtra(line7);
-        line5.addExtra(line6);
-        line4.addExtra(line5);
-        line3.addExtra(line4);
-        line2.addExtra(line3);
-        line1.addExtra(line2);
+        TextComponent text = TextUtil.combineTextComponents(line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12);
 
-        player.spigot().sendMessage(line1);
+        player.spigot().sendMessage(text);
     }
 
     private TextComponent createUsageComponent(Player player, String command, String description, String suggest, String hover) {
-        TextComponent lineComponent = new TextComponent("§8 - ");
-        TextComponent commandComponent = new TextComponent("§b" + command);
-        TextComponent textComponent = new TextComponent(description + "\n");
-
-        commandComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggest));
-        commandComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
-
-        commandComponent.addExtra(textComponent);
-        lineComponent.addExtra(commandComponent);
-        return lineComponent;
+        return TextUtil.createUsageComponent(player,command,description,suggest,hover);
     }
 
     private void setBase(Player player) {
@@ -399,42 +376,54 @@ public class TeamCommand implements CommandExecutor {
         player.sendMessage(plugin.getPREFIX() + "Du hast das Team §b" + playerTeam.getName() + "§7 verlassen.");
     }
 
-    private void createTeam(Player player) {
+    private void createTeamDialog(Player player) {
         SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
         Team team = survivalPlayer.getTeam();
         if(team == null) {
             new PlayerChatInput(plugin, player, "§7Wähle einen Namen", (input) -> {
-                if(input == null) {
-                    return;
-                }
-                if(input.length() < 4) {
-                    player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht kürzer als 4 Zeichen sein.");
-                    return;
-                }
-                if(input.length() > 14) {
-                    player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht länger als 14 Zeichen sein.");
-                    return;
-                }
-               Team newTeam = new Team(input, player.getUniqueId());
-                if(teamManager.createTeam(newTeam)) {
-                    player.sendMessage(plugin.getPREFIX() + String.format("Das Team §b%s §7wurde erstellt!", input));
-
-                    if(!survivalPlayer.hasReward("first_team")) {
-                        player.sendMessage(plugin.getPREFIX()+ "§6[BELOHNUNG FREIGESCHALTET]");
-                        player.sendMessage(plugin.getPREFIX() + "Du erhälst 1x §5TELEPORTER §7und 4x §dTeleport Kristall");
-                        player.getInventory().addItem(TeleporterRecipe.getItemStack());
-                        ItemStack itemStack = new ItemStack(TeleportCrystalRecipe.getItemStack());
-                        itemStack.setAmount(4);
-                        player.getInventory().addItem(itemStack);
-                        survivalPlayer.claimReward("first_team");
-                    }
-                } else {
-                    player.sendMessage(plugin.getPREFIX() + "§cEin Fehler ist aufgetreten. Versuche es erneut.");
-                };
+                createTeam(player, input);
             });
         } else {
             player.sendMessage(plugin.getPREFIX() + "§cDu bist bereits in einem Team.");
         }
+    }
+
+    private void createTeam(Player player, String input) {
+        SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
+        Team team = survivalPlayer.getTeam();
+
+        if(team != null) {
+            player.sendMessage(plugin.getPREFIX() + "§cDu bist bereits in einem Team.");
+            return;
+        }
+
+        if(input == null) {
+            return;
+        }
+        if(input.length() < 4) {
+            player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht kürzer als 4 Zeichen sein.");
+            return;
+        }
+        if(input.length() > 14) {
+            player.sendMessage(plugin.getPREFIX() + "Der Name darf nicht länger als 14 Zeichen sein.");
+            return;
+        }
+        Team newTeam = new Team(input, player.getUniqueId());
+        if(teamManager.createTeam(newTeam)) {
+            player.sendMessage(plugin.getPREFIX() + String.format("Das Team §b%s §7wurde erstellt!", input));
+
+            if(!survivalPlayer.hasReward("first_team")) {
+                player.sendMessage(plugin.getPREFIX()+ "§6[BELOHNUNG FREIGESCHALTET]");
+                player.sendMessage(plugin.getPREFIX() + "Du erhälst 1x §5TELEPORTER §7und 4x §dTeleport Kristall");
+                player.getInventory().addItem(TeleporterRecipe.getItemStack());
+                ItemStack itemStack = new ItemStack(TeleportCrystalRecipe.getItemStack());
+                itemStack.setAmount(4);
+                player.getInventory().addItem(itemStack);
+                survivalPlayer.claimReward("first_team");
+            }
+        } else {
+            player.sendMessage(plugin.getPREFIX() + "§cEin Fehler ist aufgetreten. Versuche es erneut.");
+        };
     }
 }
 
