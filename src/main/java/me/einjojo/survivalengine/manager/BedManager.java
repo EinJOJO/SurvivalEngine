@@ -1,6 +1,8 @@
 package me.einjojo.survivalengine.manager;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -33,6 +35,9 @@ public class BedManager {
     }
 
     public void check() {
+        for (Player player : IN_BED) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7Spieler in Bett: §c" + IN_BED.size() + "§f/§c" + getOnlinePlayers() / 2));
+        }
         if(IN_BED.size() >= getOnlinePlayers() / 2) {
             Bukkit.getServer().getWorlds().forEach((world -> {
                 world.setThundering(false);
