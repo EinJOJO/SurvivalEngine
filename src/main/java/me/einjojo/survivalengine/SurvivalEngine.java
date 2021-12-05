@@ -3,6 +3,7 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.*;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
+import me.einjojo.survivalengine.recipe.BedrockPickaxeRecipe;
 import me.einjojo.survivalengine.recipe.HasteRecipe;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
@@ -60,6 +61,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new TeleportCrystalRecipe();
         new TeleporterRecipe();
         new HasteRecipe();
+        new BedrockPickaxeRecipe();
     }
 
     private void initClasses() {

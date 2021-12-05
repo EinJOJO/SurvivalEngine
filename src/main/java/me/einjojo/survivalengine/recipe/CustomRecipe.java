@@ -10,7 +10,7 @@ public abstract class CustomRecipe {
 
     private final NamespacedKey namespace;
 
-    protected CustomRecipe(NamespacedKey namespace) {
+    public CustomRecipe(NamespacedKey namespace) {
         this.namespace = namespace;
         SurvivalEngine.getInstance().getRecipeManager().addRecipe(this);
     }
