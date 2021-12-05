@@ -3,6 +3,7 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.*;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
+import me.einjojo.survivalengine.recipe.HasteRecipe;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
@@ -56,8 +57,9 @@ public final class SurvivalEngine extends JavaPlugin {
 
 
     private void registerRecipes() {
-        new TeleportCrystalRecipe(this);
-        new TeleporterRecipe(this);
+        new TeleportCrystalRecipe();
+        new TeleporterRecipe();
+        new HasteRecipe();
     }
 
     private void initClasses() {

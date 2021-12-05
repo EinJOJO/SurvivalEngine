@@ -22,3 +22,4 @@ commands:
     description: Repariere kaputte Kristalle
   waypoint:
     description: Waypoint Management
+  debug:

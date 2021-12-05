@@ -16,9 +16,8 @@ public class TeleportCrystalRecipe extends CustomRecipe {
 
     private static ItemStack itemStack;
 
-    public TeleportCrystalRecipe(SurvivalEngine plugin) {
+    public TeleportCrystalRecipe() {
         super(NamespacedKey.minecraft("teleport_crystal"));
-        plugin.getRecipeManager().addRecipe(this);
     }
 
     @Override
