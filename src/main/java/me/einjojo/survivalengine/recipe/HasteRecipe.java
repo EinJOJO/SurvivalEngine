@@ -28,9 +28,10 @@ public class HasteRecipe extends CustomRecipe {
         PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
 
         potionMeta.setColor(Color.YELLOW);
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20*180, 1), true);
-        potionMeta.setDisplayName("Potion of Haste");
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20*300, 2), true);
+        potionMeta.setDisplayName("§rPotion of Haste");
         List<String> lore = new ArrayList<>();
+        lore.add("");
         lore.add("§eEin magisches Getränk,");
         lore.add("§ewelches so nicht existiert.");
         potionMeta.setLore(lore);

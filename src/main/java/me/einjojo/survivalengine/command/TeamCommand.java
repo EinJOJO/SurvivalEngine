@@ -177,7 +177,7 @@ public class TeamCommand implements CommandExecutor {
             line6.addExtra("§cNicht gesetzt \n");
         } else {
             Location location = team.getBaseLocation();
-            line6.addExtra(String.format("§b%d %d %d \n", (int) location.getX(), (int) location.getX(), (int) location.getY() ));
+            line6.addExtra(String.format("§b%d %d %d \n", (int) location.getX(), (int) location.getY(), (int) location.getZ() ));
         }
         line9.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Kopieren")));
         line9.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, team.getId().toString()));

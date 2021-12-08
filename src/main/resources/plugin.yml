@@ -23,3 +23,6 @@ commands:
   waypoint:
     description: Waypoint Management
   debug:
+    description: none
+  ping:
+    description: Show players Ping.

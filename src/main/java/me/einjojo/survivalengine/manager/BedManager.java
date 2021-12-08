@@ -21,13 +21,15 @@ public class BedManager {
     public void addPlayer(Player player) {
         if(!IN_BED.contains(player)) {
             IN_BED.add(player);
+            check();
         }
-        check();
     }
 
     public void removePlayer(Player player) {
-        IN_BED.remove(player);
-        check();
+        if(IN_BED.contains(player)) {
+            IN_BED.remove(player);
+            check();
+        }
     }
 
     private int getOnlinePlayers() {
@@ -35,17 +37,19 @@ public class BedManager {
     }
 
     public void check() {
-        for (Player player : IN_BED) {
-            player.resetTitle();
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7Spieler in Bett: §c" + IN_BED.size() + "§f/§c" + getOnlinePlayers() / 2));
-        }
-        if(IN_BED.size() >= getOnlinePlayers() / 2) {
-            Bukkit.broadcastMessage(SurvivalEngine.getInstance().getPREFIX() + "Es wird Tag, da die Hälfte schlief.");
-            Bukkit.getServer().getWorlds().forEach((world -> {
-                world.setThundering(false);
-                world.setStorm(false);
-                world.setTime(0);
-            }));
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(SurvivalEngine.getInstance(), ()->{
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.resetTitle();
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7Spieler in Bett: §c" + IN_BED.size() + "§f/§c" + getOnlinePlayers() / 2));
+            }
+            if(IN_BED.size() >= getOnlinePlayers() / 2) {
+                Bukkit.broadcastMessage(SurvivalEngine.getInstance().getPREFIX() + "Es wird Tag, da die Hälfte schlief.");
+                Bukkit.getServer().getWorlds().forEach((world -> {
+                    world.setThundering(false);
+                    world.setStorm(false);
+                    world.setTime(0);
+                }));
+            }
+        },2L);
     }
 }

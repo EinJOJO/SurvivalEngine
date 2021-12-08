@@ -10,6 +10,7 @@ import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
 import me.einjojo.survivalengine.tabcomplete.StatsTabComplete;
 import me.einjojo.survivalengine.tabcomplete.TeamTabComplete;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SurvivalEngine extends JavaPlugin {
@@ -35,13 +36,14 @@ public final class SurvivalEngine extends JavaPlugin {
         teleportManager.load();
         playerManager.load();
         teamManager.load();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 20*60*30, 20*60*60);
+
     }
 
     @Override
     public void onDisable() {
-        this.teleportManager.save();
-        this.playerManager.save();
-        this.teamManager.save();
+        save();
     }
 
     public InventoryManager getInventoryManager() {
@@ -75,13 +77,20 @@ public final class SurvivalEngine extends JavaPlugin {
         this.tabListManager = new TabListManager(this);
     }
 
+    private void save() {
+        this.teleportManager.save();
+        this.playerManager.save();
+        this.teamManager.save();
+    }
+
 
     private void registerCommands() {
         new DifficultyCommand(this);
         new TeamCommand(this);
-        //new GetCommand(this);
+        new DebugCommand(this);
         new TeleporterCommand(this);
         new StatsCommand(this);
+        new PingCommand(this);
     }
 
     private void registerTabComplete() {
