@@ -4,7 +4,6 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

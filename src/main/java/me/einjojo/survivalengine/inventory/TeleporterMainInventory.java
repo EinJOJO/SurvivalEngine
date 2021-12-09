@@ -13,14 +13,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleporterInventory {
+public class TeleporterMainInventory {
 
     private final SurvivalEngine plugin;
     private final InventoryManager inventoryManager;
     private final static String name = "§cTeleporter verwalten";
+    private Inventory inventory;
 
-    public TeleporterInventory(SurvivalEngine plugin) {
-        this.plugin = plugin;
+    public TeleporterMainInventory() {
+        this.plugin = SurvivalEngine.getInstance();
         this.inventoryManager = plugin.getInventoryManager();
     }
 
@@ -30,8 +31,22 @@ public class TeleporterInventory {
 
 
     public Inventory getInventory(Player player, Teleporter teleporter) {
-        Inventory inventory = Bukkit.getServer().createInventory(null, 54, name);
+        inventory = Bukkit.getServer().createInventory(null, 54, name);
         inventoryManager.fillGuiWithGlass(inventory);
+
+        addLinkedTeleporterItem(30);
+        addUnbindItem( 32);
+        addInformationItem( teleporter, 13);
+
+        if(player.getUniqueId().equals(teleporter.getOwner())) {
+            addDismountItem(53);
+        }
+        return inventory;
+    }
+    public void openInventory(Player player, Teleporter teleporter) {
+        player.openInventory(getInventory(player, teleporter));
+    }
+    private void addUnbindItem( int position) {
         List<String> lore = new ArrayList<>();
         lore.add("");
         lore.add("§7Platziere deinen §5Teleport");
@@ -39,31 +54,17 @@ public class TeleporterInventory {
         lore.add("§7ihn zurückzusetzten");
         lore.add("");
         lore.add("§4FEHLERHAFT: §7Nutze §b/fix §7alternativ");
-        inventoryManager.addItemStack(inventory, new ItemStack(Material.FLOWER_POT),  31, "§6Disbinder", lore);
-        addInformationItem(inventory, teleporter, 13);
-        if(player.getUniqueId().equals(teleporter.getOwner())) {
-            addDismountItem(inventory, 53);
-        }
-
-        return inventory;
+        inventoryManager.addItemStack(inventory, new ItemStack(Material.FLOWER_POT),  position, "§6Disbinder", lore);
     }
-
-    public void openInventory(Player player, Teleporter teleporter) {
-        player.openInventory(getInventory(player, teleporter));
-    }
-
-    private void addDismountItem(Inventory inventory, int position) {
+    private void addDismountItem( int position) {
         ItemStack itemStack = new ItemStack(Material.BARRIER, 1);
         List<String> lore = new ArrayList<>();
         lore.add("");
         lore.add("§cKlick mich, um den");
         lore.add("§cTeleporter abzubauen");
-
-
         inventoryManager.addItemStack(inventory, itemStack, position, "§4Teleporter abbauen", lore );
     }
-
-    private void addInformationItem(Inventory inventory, Teleporter teleporter, int position) {
+    private void addInformationItem(Teleporter teleporter, int position) {
         List<String> lore = new ArrayList<>();
         lore.add("");
         lore.add("§7Besitzer: §c" + Bukkit.getOfflinePlayer(teleporter.getOwner()).getName());
@@ -72,6 +73,15 @@ public class TeleporterInventory {
         lore.add("");
 
         inventoryManager.addItemStack(inventory, new ItemStack(Material.TOTEM_OF_UNDYING), position, "§c"+teleporter.getName(), lore );
+    }
+    private void addLinkedTeleporterItem(int position) {
+        ItemStack itemStack = new ItemStack(Material.WRITABLE_BOOK, 1);
+        List<String> lore = new ArrayList<>();
+        lore.add("");
+        lore.add("§c[Rechtsklick] §7Sync-Splitter erhalten.");
+        lore.add("§c[Linksklick] §7Teleporter Menü öffnen");
+        lore.add("");
+        inventoryManager.addItemStack(inventory, itemStack, position, "§6Verlinkte Teleporter", lore );
     }
 
 

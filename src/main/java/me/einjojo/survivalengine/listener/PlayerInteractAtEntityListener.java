@@ -1,7 +1,8 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
-import me.einjojo.survivalengine.inventory.TeleporterInventory;
+import me.einjojo.survivalengine.inventory.TeleporterMainInventory;
+import me.einjojo.survivalengine.manager.TeleportManager;
 import me.einjojo.survivalengine.object.Teleporter;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
@@ -21,8 +22,10 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerInteractAtEntityListener implements Listener {
 
     private final SurvivalEngine plugin;
+    private final TeleportManager teleportManager;
     public PlayerInteractAtEntityListener(SurvivalEngine plugin) {
         this.plugin = plugin;
+        this.teleportManager = plugin.getTeleportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
     }
@@ -39,16 +42,14 @@ public class PlayerInteractAtEntityListener implements Listener {
                 Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterName);
                 if(itemStack.isSimilar(TeleportCrystalRecipe.getItemStack())) return;
                 if(teleporter == null) {
-                    player.sendMessage(plugin.getPREFIX() + "Fehlerhafter Teleporter wurde entfernt");
-                    player.getInventory().addItem(TeleporterRecipe.getItemStack());
-                    entity.remove();
+                    teleportManager.malfunctionTeleporter(player, entity);
                     return;
                 }
 
                 entity.setInvulnerable(!teleporter.isActivated());
                 player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.5F, 1);
 
-                new TeleporterInventory(plugin).openInventory(player, teleporter);
+                new TeleporterMainInventory().openInventory(player, teleporter);
             }
         }
     }
@@ -69,9 +70,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                 Teleporter teleporter = plugin.getTeleportManager().getTeleporter(teleporterEntity.getName());
 
                 if(teleporter == null) {
-                    player.sendMessage(plugin.getPREFIX() + "Fehlerhafter Teleporter wurde entfernt");
-                    player.getInventory().addItem(TeleporterRecipe.getItemStack());
-                    teleporterEntity.remove();
+                    teleportManager.malfunctionTeleporter(player, teleporterEntity);
                     return;
                 }
 
@@ -84,6 +83,47 @@ public class PlayerInteractAtEntityListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void linkTeleporter(PlayerInteractAtEntityEvent e) {
+        if(e.getHand().equals(EquipmentSlot.HAND)) {
+            if(!isInteractingWithTeleporter(e)) {
+                return;
+            }
+            Player player = e.getPlayer();
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            Entity teleporterEntity = e.getRightClicked();
+
+            if(itemStack.getItemMeta() == null) {
+                return;
+            }
+            if(!itemStack.getItemMeta().getDisplayName().equals("§5Teleport Splitter")) {
+                return;
+            }
+            e.setCancelled(true);
+
+            //Get Teleporter
+            Teleporter teleporter = teleportManager.getTeleporter(teleporterEntity.getName());
+            if(teleporter == null) {
+                teleportManager.malfunctionTeleporter(player, teleporterEntity);
+                return;
+            }
+            String shardName = new TeleportCrystalUtil().getTeleporterNameFromShard(itemStack);
+            Teleporter linkedTeleporter = teleportManager.getTeleporter(shardName);
+            if( linkedTeleporter == null) {
+                player.sendMessage("§cDer Teleporter existiert nicht mehr.");
+                return;
+            }
+
+            try {
+                teleporter.link(linkedTeleporter);
+            } catch (Exception ex) {
+                player.sendMessage(plugin.getPREFIX() + ex.getMessage());
+                return;
+            }
+            player.sendMessage(plugin.getPREFIX() + "§aErfolgreich Verbunden mit " + shardName);
+            itemStack.setAmount(itemStack.getAmount() - 1);
+        }
+    }
 
     private boolean isInteractingWithTeleporter(PlayerInteractAtEntityEvent e) {
         Entity entity = e.getRightClicked();

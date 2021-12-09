@@ -34,11 +34,7 @@ public class FixCommand implements CommandExecutor {
             return true;
         }
 
-        ItemStack COPIED = new ItemStack(TeleportCrystalRecipe.getItemStack());
-        COPIED.setAmount(itemStack.getAmount());
-
-        itemStack.setAmount(0);
-        player.getInventory().addItem(COPIED);
+        itemStack.setItemMeta(TeleportCrystalRecipe.getItemStack().getItemMeta());
         player.sendMessage("§aTeleport Kristall repariert.");
 
 

@@ -62,11 +62,11 @@ public class PlayerInteractListener implements Listener {
         if(!e.getHand().equals(EquipmentSlot.HAND)) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         if(teleportManager.getINTERACT_BLACKLIST().contains(player)) return;
-        if(itemStack == null) return;
+        if(itemStack.getItemMeta() == null) return;
         if(!itemStack.getItemMeta().getDisplayName().equals(TeleportCrystalRecipe.getItemStack().getItemMeta().getDisplayName())) return;
 
         TeleportCrystalUtil utility = new TeleportCrystalUtil();
-        String teleporterName = utility.getTeleporterName(itemStack);
+        String teleporterName = utility.getTeleporterNameFromCrystal(itemStack);
 
         if(teleporterName == null) {
             player.sendMessage(plugin.getPREFIX() + "§cDer Kristall ist an keinen Teleporter gebunden.");
@@ -81,16 +81,8 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-
-
-        teleportManager.getTELEPORTING_PLAYERS().add(player);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 255));
-        player.teleport(teleporter.getLocation());
-        player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 0.5f, 3);
-        player.removePotionEffect(PotionEffectType.BLINDNESS);
         itemStack.setAmount(itemStack.getAmount() - 1);
-        teleporter.setUsedCounter(teleporter.getUsedCounter() + 1);
-        teleportManager.getTELEPORTING_PLAYERS().remove(player);
+        teleportManager.teleport(player, teleporter);
     }
 
     @EventHandler
@@ -98,6 +90,8 @@ public class PlayerInteractListener implements Listener {
         if(e.getHand() == null) return;
         if(e.getItem() == null) return;
         if(!e.getItem().getType().equals(Material.ENDER_EYE)) return;
+        //if(System.currentTimeMillis() > 1639213200000L) return; //11.12.21 10a.m
+        if(System.currentTimeMillis() > 1639064700000L) return;
         e.setCancelled(true);
     }
 

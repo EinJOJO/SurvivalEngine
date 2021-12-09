@@ -41,6 +41,20 @@ public class TeleporterPlaceListener implements Listener {
             }
 
             Teleporter teleporter = new Teleporter(input, teleporterLocation, e.getPlayer().getUniqueId());
+
+            try {
+                plugin.getTeleportManager().createTeleporter(teleporter);
+
+            } catch (Exception exception) {
+
+            }
+
+            Entity teleporterEntity = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);
+            teleporterEntity.setCustomName("§c" + input);
+            teleporterEntity.setCustomNameVisible(true);
+            e.getPlayer().sendMessage(plugin.getPREFIX() + "§aDer Teleporter wurde platziert");
+
+            /*
             if(plugin.getTeleportManager().createTeleporter(teleporter)) {
                 Entity teleporterEntity = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);
                 teleporterEntity.setCustomName("§c" + input);
@@ -51,6 +65,8 @@ public class TeleporterPlaceListener implements Listener {
                 e.getPlayer().sendMessage(plugin.getPREFIX() + "§cDieser Name wird bereits verwendet.");
 
             }
+
+             */
         });
     }
 }
