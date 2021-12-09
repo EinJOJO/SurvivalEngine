@@ -78,6 +78,16 @@ public class InventoryClickListener implements Listener {
                     return;
                 }
                 break;
+            case "§cAccess-Modifier":
+                try {
+                    Teleporter.Type type = teleporter.switchType(player);
+                    player.sendMessage(plugin.getPREFIX() + "Der Teleporter wurde auf §e" + type.toString().toUpperCase() + " §7geändert.");
+                    new TeleporterMainInventory().openInventory(player, teleporter);
+
+                } catch (Exception ex) {
+                    player.sendMessage(plugin.getPREFIX() + "§c" + ex.getMessage());
+                    return;
+                }
         }
     }
 
@@ -116,7 +126,7 @@ public class InventoryClickListener implements Listener {
                 Teleporter targetTeleporter = teleportManager.getTeleporter(targetTeleporterName);
 
                 if(targetTeleporter == null) {
-                    currentTeleporter.unLink(targetTeleporterName);
+                    currentTeleporter.unLink(targetTeleporterName.substring(2));
                     player.sendMessage("§cDer Teleporter existiert nicht mehr");
                     player.closeInventory();
                     return;

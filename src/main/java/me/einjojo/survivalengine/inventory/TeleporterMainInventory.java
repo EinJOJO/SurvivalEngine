@@ -2,6 +2,8 @@ package me.einjojo.survivalengine.inventory;
 
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.manager.InventoryManager;
+import me.einjojo.survivalengine.object.SurvivalPlayer;
+import me.einjojo.survivalengine.object.Team;
 import me.einjojo.survivalengine.object.Teleporter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -37,9 +39,20 @@ public class TeleporterMainInventory {
         addLinkedTeleporterItem(30);
         addUnbindItem( 32);
         addInformationItem( teleporter, 13);
+        addAccessModifierItem(teleporter, 49);
 
-        if(player.getUniqueId().equals(teleporter.getOwner())) {
-            addDismountItem(53);
+        if(teleporter.getType().equals(Teleporter.Type.TEAM)) {
+            SurvivalPlayer survivalPlayer = plugin.getPlayerManager().getPlayer(player);
+            Team team = survivalPlayer.getTeam();
+
+
+            if ( team != null && teleporter.isOwner(team)) {
+                addDismountItem(53);
+            }
+        } else {
+            if(player.getUniqueId().equals(teleporter.getOwner())) {
+                addDismountItem(53);
+            }
         }
         return inventory;
     }
@@ -67,7 +80,11 @@ public class TeleporterMainInventory {
     private void addInformationItem(Teleporter teleporter, int position) {
         List<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add("§7Besitzer: §c" + Bukkit.getOfflinePlayer(teleporter.getOwner()).getName());
+        if(teleporter.getType().equals(Teleporter.Type.PLAYER)) {
+            lore.add("§7Besitzer: §c" + Bukkit.getOfflinePlayer(teleporter.getOwner()).getName());
+        } else {
+            lore.add("§7Besitzer: §c" + SurvivalEngine.getInstance().getTeamManager().getTeam(teleporter.getOwner()).getName());
+        }
         lore.add("§7Benutzt: §c" + teleporter.getUsedCounter());
         lore.add("§7Status: " + ((teleporter.isActivated()) ? "§aAktiviert": "§cDeaktiviert"));
         lore.add("");
@@ -82,6 +99,21 @@ public class TeleporterMainInventory {
         lore.add("§c[Linksklick] §7Teleporter Menü öffnen");
         lore.add("");
         inventoryManager.addItemStack(inventory, itemStack, position, "§6Verlinkte Teleporter", lore );
+    }
+
+    private void addAccessModifierItem(Teleporter teleporter, int position) {
+        ItemStack itemStack = new ItemStack(Material.OAK_SIGN, 1);
+        List<String> lore = new ArrayList<>();
+        lore.add("");
+        if(teleporter.getType().equals(Teleporter.Type.TEAM)) {
+            lore.add("§8» §cTeam");
+            lore.add("§7Spieler");
+        } else {
+            lore.add("§7Team");
+            lore.add("§8» §cSpieler");
+        }
+        lore.add("");
+        inventoryManager.addItemStack(inventory, itemStack, position, "§cAccess-Modifier", lore );
     }
 
 

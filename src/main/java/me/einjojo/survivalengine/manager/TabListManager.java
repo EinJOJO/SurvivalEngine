@@ -17,16 +17,18 @@ public class TabListManager {
     private final TeamManager teamManager;
     private final PlayerManager playerManager;
     private final Map<UUID, String> TEAM_MAP;
+    private final String VERSION;
     private Scoreboard scoreboard;
 
     public TabListManager(SurvivalEngine plugin) {
+        this.VERSION = plugin.getVERSION();
         this.teamManager = plugin.getTeamManager();
         this.playerManager = plugin.getPlayerManager();
         this.TEAM_MAP = new HashMap<>();
     }
 
     public void setPlayerList(Player player) {
-        player.setPlayerListHeaderFooter("§b§lSURVIVAL V2\n","\n§7Powered by the §fSurvivalEngine§o2.5 \n " +
+        player.setPlayerListHeaderFooter("§b§lSURVIVAL V2\n","\n§7Powered by the §fSurvivalEngine§o§b" + VERSION + " \n " +
                 "§3/difficulty /team /teleporter /stats");
     }
 

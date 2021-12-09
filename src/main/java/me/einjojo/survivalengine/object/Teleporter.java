@@ -1,5 +1,6 @@
 package me.einjojo.survivalengine.object;
 
+import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ public class Teleporter implements ConfigurationSerializable {
     private final Location location;
     private int usedCounter;
     private boolean activated;
-    private final UUID owner;
+    private UUID owner;
     private final List<String> LINKED_TELEPORTER;
     private Type type;
 
@@ -39,6 +40,46 @@ public class Teleporter implements ConfigurationSerializable {
 
     public void link(Teleporter teleporter) throws Exception {
         link(teleporter.getName());
+    }
+
+    public Type switchType(Player executor) throws Exception {
+        if(this.type.equals(Type.PLAYER)) {
+            if(isOwner(executor)) {
+                SurvivalPlayer player = SurvivalEngine.getInstance().getPlayerManager().getPlayer(executor);
+                Team team = player.getTeam();
+                if(team != null) {
+                    setType(Type.TEAM);
+                    setOwner(team.getId());
+                } else {
+                    throw new Exception("Du bist in keinem Team");
+                }
+            } else {
+                throw new Exception("Du bist nicht der Besitzer");
+            }
+        } else {
+            SurvivalPlayer player = SurvivalEngine.getInstance().getPlayerManager().getPlayer(executor);
+            Team team = player.getTeam();
+            if(team == null) {
+                throw new Exception("Du bist nicht in dem Team");
+            }
+            if(!team.isMember(executor)) {
+                throw new Exception("Du bist nicht in dem Team");
+            }
+
+
+            setOwner(executor.getUniqueId());
+            setType(Type.PLAYER);
+        }
+        return getType();
+    }
+
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public void unLink(Teleporter teleporter) {

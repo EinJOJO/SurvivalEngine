@@ -35,19 +35,30 @@ public class TeleporterCommand implements CommandExecutor {
         Player player = (Player) sender;
         SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
 
-        List<Teleporter> teleporterList = survivalPlayer.getTeleporter();
-        if(teleporterList == null || teleporterList.size() == 0) {
+        List<Teleporter> privateTeleporterList = survivalPlayer.getTeleporter();
+        if(privateTeleporterList == null || privateTeleporterList.size() == 0) {
             player.sendMessage(PREFIX + "§cDu hast keine Teleporter.");
             return true;
         }
 
-        TextComponent textComponent = new TextComponent(PREFIX + "§7Deine Teleporter (§c"+ teleporterList.size() +"§7): \n");
-        teleporterList.forEach((teleporter -> {
+        TextComponent textComponent = new TextComponent(PREFIX + "§7Deine Teleporter (§c"+ privateTeleporterList.size() +"§7): \n");
+        privateTeleporterList.forEach((teleporter -> {
             TextComponent teleportComponent = new TextComponent("§8- §c"+ teleporter.getName() + "\n");
             teleportComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§7Position: §c%d %d %d", (int) teleporter.getLocation().getX(),(int) teleporter.getLocation().getY(),(int) teleporter.getLocation().getZ()))));
             textComponent.addExtra(teleportComponent);
         }));
 
+
+        /*
+        TextComponent textComponent2 = new TextComponent(PREFIX + "§Team Teleporter (§c"+ privateTeleporterList.size() +"§7): \n");
+        privateTeleporterList.forEach((teleporter -> {
+            TextComponent teleportComponent = new TextComponent("§8- §c"+ teleporter.getName() + "\n");
+            teleportComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§7Position: §c%d %d %d", (int) teleporter.getLocation().getX(),(int) teleporter.getLocation().getY(),(int) teleporter.getLocation().getZ()))));
+            textComponent.addExtra(teleportComponent);
+        }));
+
+
+         */
         player.spigot().sendMessage(textComponent);
 
         return true;

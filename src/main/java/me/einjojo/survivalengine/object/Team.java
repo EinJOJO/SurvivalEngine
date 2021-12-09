@@ -68,6 +68,13 @@ public class Team implements ConfigurationSerializable {
         return owner;
     }
 
+    public boolean isMember(UUID player) {
+        return getMembers().contains(player);
+    }
+
+    public boolean isMember(Player player) {
+        return isMember(player.getUniqueId());
+    }
     public List<UUID> getMembers() {
         return members;
     }

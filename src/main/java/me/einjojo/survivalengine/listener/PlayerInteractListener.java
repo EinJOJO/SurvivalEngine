@@ -90,8 +90,7 @@ public class PlayerInteractListener implements Listener {
         if(e.getHand() == null) return;
         if(e.getItem() == null) return;
         if(!e.getItem().getType().equals(Material.ENDER_EYE)) return;
-        //if(System.currentTimeMillis() > 1639213200000L) return; //11.12.21 10a.m
-        if(System.currentTimeMillis() > 1639064700000L) return;
+        if(System.currentTimeMillis() > 1639213200000L) return; //11.12.21 10a.m
         e.setCancelled(true);
     }
 

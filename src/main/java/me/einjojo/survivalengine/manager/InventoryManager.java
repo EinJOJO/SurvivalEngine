@@ -39,6 +39,7 @@ public class InventoryManager {
     }
 
     public void setTeleporterInventory(UUID uuid, Teleporter teleporter) {
+        OPENED_TELEPORTER_INVENTORY.remove(uuid);
         OPENED_TELEPORTER_INVENTORY.put(uuid, teleporter);
     }
 

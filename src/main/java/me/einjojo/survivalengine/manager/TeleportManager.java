@@ -56,7 +56,17 @@ public class TeleportManager {
     public List<Teleporter> getTeleporterByPlayer(UUID playerUUID) {
         List<Teleporter> teleporterList = new ArrayList<>();
         for(Map.Entry<String, Teleporter> entry : TELEPORTER_MAP.entrySet()){
-            if(entry.getValue().getOwner().equals(playerUUID)) {
+            if((entry.getValue().getType().equals(Teleporter.Type.PLAYER)) && (entry.getValue().getOwner().equals(playerUUID))) {
+                teleporterList.add(entry.getValue());
+            }
+        }
+        return teleporterList;
+    }
+
+    public List<Teleporter> getTeleporterByTeam(UUID teamID) {
+        List<Teleporter> teleporterList = new ArrayList<>();
+        for(Map.Entry<String, Teleporter> entry : TELEPORTER_MAP.entrySet()){
+            if((entry.getValue().getType().equals(Teleporter.Type.TEAM)) && (entry.getValue().getOwner().equals(teamID))) {
                 teleporterList.add(entry.getValue());
             }
         }
@@ -141,7 +151,7 @@ public class TeleportManager {
             List<String> linkedTeleporter = configurationSection.getStringList(teleporter + ".linked");
 
             Teleporter.Type type;
-            if(configurationSection.getString(teleporter + ".type") == "team") {
+            if(configurationSection.getString(teleporter + ".type").contains("team")) {
                 type = Teleporter.Type.TEAM;
             } else {
                 type = Teleporter.Type.PLAYER;

@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class SurvivalEngine extends JavaPlugin {
 
     private final String PREFIX = "§7「§b§lΣNGINΣ§7」» ";
+    private final String VERSION = this.getDescription().getVersion();
 
     private static SurvivalEngine instance;
     private RecipeManager recipeManager;
@@ -138,5 +139,9 @@ public final class SurvivalEngine extends JavaPlugin {
 
     public static SurvivalEngine getInstance() {
         return instance;
+    }
+
+    public String getVERSION() {
+        return VERSION;
     }
 }
