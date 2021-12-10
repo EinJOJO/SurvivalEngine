@@ -16,6 +16,9 @@ import org.bukkit.event.entity.EntityTargetEvent;
 
 public class TransportChicken extends Chicken {
 
+
+    private final org.bukkit.entity.Player OWNER;
+
     public TransportChicken(Location location, org.bukkit.entity.Player owner) {
         super(EntityType.CHICKEN, ((CraftWorld) location.getWorld()).getHandle());
         this.setHealth(2);
@@ -23,8 +26,8 @@ public class TransportChicken extends Chicken {
         this.setPos(location.getX(), location.getY(), location.getZ());
         this.setCustomName(new TextComponent("§e" + owner.getName() + "'s Transporter"));
         this.setCustomNameVisible(true);
-
-        this.setTarget(((LivingEntity) ((CraftPlayer) owner).getHandle()), EntityTargetEvent.TargetReason.CUSTOM, true);
+        this.OWNER = owner;
+        setTarget(owner);
     }
 
     @Override
@@ -32,6 +35,14 @@ public class TransportChicken extends Chicken {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FollowTargetGoal(this, 1.2, 8));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8, 0.9F));
+    }
+
+    private void setTarget(org.bukkit.entity.Player player) {
+        this.setTarget(((CraftPlayer) player).getHandle(), EntityTargetEvent.TargetReason.CUSTOM, true);
+    }
+
+    public void leave() {
+        this.goalSelector.removeAllGoals();
     }
 
 

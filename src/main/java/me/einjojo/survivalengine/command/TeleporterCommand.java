@@ -36,31 +36,27 @@ public class TeleporterCommand implements CommandExecutor {
         SurvivalPlayer survivalPlayer = playerManager.getPlayer(player);
 
         List<Teleporter> privateTeleporterList = survivalPlayer.getTeleporter();
-        if(privateTeleporterList == null || privateTeleporterList.size() == 0) {
-            player.sendMessage(PREFIX + "§cDu hast keine Teleporter.");
-            return true;
-        }
-
         TextComponent textComponent = new TextComponent(PREFIX + "§7Deine Teleporter (§c"+ privateTeleporterList.size() +"§7): \n");
         privateTeleporterList.forEach((teleporter -> {
-            TextComponent teleportComponent = new TextComponent("§8- §c"+ teleporter.getName() + "\n");
-            teleportComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§7Position: §c%d %d %d", (int) teleporter.getLocation().getX(),(int) teleporter.getLocation().getY(),(int) teleporter.getLocation().getZ()))));
-            textComponent.addExtra(teleportComponent);
+            textComponent.addExtra(teleporterComponent(teleporter));
         }));
 
-
-        /*
-        TextComponent textComponent2 = new TextComponent(PREFIX + "§Team Teleporter (§c"+ privateTeleporterList.size() +"§7): \n");
-        privateTeleporterList.forEach((teleporter -> {
-            TextComponent teleportComponent = new TextComponent("§8- §c"+ teleporter.getName() + "\n");
-            teleportComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§7Position: §c%d %d %d", (int) teleporter.getLocation().getX(),(int) teleporter.getLocation().getY(),(int) teleporter.getLocation().getZ()))));
-            textComponent.addExtra(teleportComponent);
-        }));
-
-
-         */
+        if(survivalPlayer.getTeam() != null) {
+            List<Teleporter> teamTeleporterList = survivalPlayer.getTeam().getTeleporter();
+            TextComponent textComponent2 = new TextComponent(PREFIX + "§7Team Teleporter (§c"+ teamTeleporterList.size() +"§7): \n");
+            teamTeleporterList.forEach((teleporter -> {
+                textComponent2.addExtra(teleporterComponent(teleporter));
+            }));
+            textComponent.addExtra(textComponent2);
+        }
         player.spigot().sendMessage(textComponent);
 
         return true;
+    }
+
+    private TextComponent teleporterComponent(Teleporter teleporter) {
+        TextComponent teleportComponent = new TextComponent("§8- §c"+ teleporter.getName() + "\n");
+        teleportComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(String.format("§7Position: §c%d %d %d", (int) teleporter.getLocation().getX(),(int) teleporter.getLocation().getY(),(int) teleporter.getLocation().getZ()))));
+        return teleportComponent;
     }
 }

@@ -106,6 +106,12 @@ public class TeleportManager {
         player.getInventory().addItem(TeleporterRecipe.getItemStack());
         teleporter.remove();
     }
+    public void malfunctionTeleporter(Player player, Teleporter teleporter) {
+        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
+        player.sendMessage(plugin.getPREFIX() + "Fehlerhafter Teleporter wurde entfernt");
+        player.getInventory().addItem(TeleporterRecipe.getItemStack());
+        deleteTeleporterAndEntity(teleporter, player);
+    }
 
     public Teleporter getTeleporter(String name) {
         return TELEPORTER_MAP.get(name.substring(2));
@@ -150,9 +156,14 @@ public class TeleportManager {
             int usedCounter = configuration.getInt("teleporter." + teleporter + ".used");
             List<String> linkedTeleporter = configurationSection.getStringList(teleporter + ".linked");
 
+            String typeString = configurationSection.getString(teleporter + ".type");
             Teleporter.Type type;
-            if(configurationSection.getString(teleporter + ".type").contains("team")) {
-                type = Teleporter.Type.TEAM;
+            if(typeString != null) {
+                if(configurationSection.getString(teleporter + ".type").contains("team")) {
+                    type = Teleporter.Type.TEAM;
+                } else {
+                    type = Teleporter.Type.PLAYER;
+                }
             } else {
                 type = Teleporter.Type.PLAYER;
             }

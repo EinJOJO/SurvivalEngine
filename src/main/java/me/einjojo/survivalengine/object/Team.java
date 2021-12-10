@@ -1,5 +1,6 @@
 package me.einjojo.survivalengine.object;
 
+import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -38,6 +39,10 @@ public class Team implements ConfigurationSerializable {
         this.owner = owner;
         this.baseLocation = baseLocation;
         this.invites = invites;
+    }
+
+    public List<Teleporter> getTeleporter() {
+        return SurvivalEngine.getInstance().getTeleportManager().getTeleporterByTeam(this.id);
     }
 
     public void setName(String name) {

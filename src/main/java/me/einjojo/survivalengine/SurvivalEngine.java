@@ -119,6 +119,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new BedListener(this);
         new PlayerChatListener(this);
         new EntityDismountListener(this);
+        new AnvilListener(this);
     }
 
     public TeamManager getTeamManager() {

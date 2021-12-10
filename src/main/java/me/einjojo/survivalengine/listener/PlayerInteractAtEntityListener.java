@@ -49,7 +49,11 @@ public class PlayerInteractAtEntityListener implements Listener {
                 entity.setInvulnerable(!teleporter.isActivated());
                 player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.5F, 1);
 
-                new TeleporterMainInventory().openInventory(player, teleporter);
+                try {
+                    new TeleporterMainInventory().openInventory(player, teleporter);
+                } catch (NullPointerException ex) {
+                    teleportManager.malfunctionTeleporter(player, teleporter);
+                }
             }
         }
     }
