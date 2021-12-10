@@ -42,7 +42,7 @@ public class PingCommand implements CommandExecutor {
                 player.sendMessage(plugin.getPREFIX() + "§cDieser Spieler ist momentan nicht verfügbar.");
                 return true;
             }
-            player.sendMessage(plugin.getPREFIX() + String.format("§6%s's §7Spielzeit beträgt: §e%d", target.getName(), target.getPing()));
+            player.sendMessage(plugin.getPREFIX() + String.format("§6%s's §7Ping: §e%d", target.getName(), target.getPing()));
         } else{
             player.sendMessage(plugin.getPREFIX() + "Dein Ping: §e" + player.getPing());
         }
