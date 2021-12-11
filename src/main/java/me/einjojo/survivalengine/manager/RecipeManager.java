@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.manager;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.recipe.ChickenControllerRecipe;
 import me.einjojo.survivalengine.recipe.CustomRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -19,10 +20,10 @@ public class RecipeManager {
         this.plugin = plugin;
     }
 
+
     public void addRecipe(CustomRecipe customRecipe) {
         plugin.getServer().addRecipe(customRecipe.getRecipe());
         recipes.add(customRecipe.getNamespace());
-        plugin.getLogger().log(Level.INFO, "Registered new Recipe: " + customRecipe.getNamespace().getKey());
     }
 
     public void loadRecipes(Player player) {

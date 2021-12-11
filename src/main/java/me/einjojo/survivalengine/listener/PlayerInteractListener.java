@@ -20,9 +20,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
 public class PlayerInteractListener implements Listener {
 
     private final SurvivalEngine plugin;
@@ -86,15 +83,6 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler
-    public void onEnderEyeThrow(PlayerInteractEvent e) {
-        if(e.getHand() == null) return;
-        if(e.getItem() == null) return;
-        if(!e.getItem().getType().equals(Material.ENDER_EYE)) return;
-        if(System.currentTimeMillis() > 1639152000000L) return; //10.12.21 5p.m
-        e.setCancelled(true);
-    }
-
-    @EventHandler
     public void onBedrockPickaxeUse(PlayerInteractEvent e) {
         if(e.getHand() == null) return;
         if(e.getHand() != EquipmentSlot.HAND) return;
@@ -127,4 +115,5 @@ public class PlayerInteractListener implements Listener {
             }
         },0, 20);
     }
+
 }

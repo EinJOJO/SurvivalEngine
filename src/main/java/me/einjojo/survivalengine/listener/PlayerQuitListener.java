@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.entity.TransportChicken;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +14,16 @@ public class PlayerQuitListener implements Listener {
     public PlayerQuitListener(SurvivalEngine plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
+    }
+
+
+    @EventHandler
+    public void removeTransporter(PlayerQuitEvent e) {
+        TransportChicken transportChicken = plugin.getTransportManager().getTransportChicken(e.getPlayer().getUniqueId());
+
+        if(transportChicken != null) {
+            transportChicken.remove();
+        }
     }
 
     @EventHandler

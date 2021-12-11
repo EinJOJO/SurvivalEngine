@@ -1,11 +1,13 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.entity.TransportChicken;
 import me.einjojo.survivalengine.inventory.TeleporterMainInventory;
+import me.einjojo.survivalengine.manager.TransporterManager;
 import me.einjojo.survivalengine.manager.TeleportManager;
 import me.einjojo.survivalengine.object.Teleporter;
+import me.einjojo.survivalengine.recipe.ChickenControllerRecipe;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
-import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.TeleportCrystalUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -23,9 +25,11 @@ public class PlayerInteractAtEntityListener implements Listener {
 
     private final SurvivalEngine plugin;
     private final TeleportManager teleportManager;
+    private final TransporterManager transporterManager;
     public PlayerInteractAtEntityListener(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.teleportManager = plugin.getTeleportManager();
+        this.transporterManager = plugin.getTransportManager();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
     }
@@ -129,6 +133,21 @@ public class PlayerInteractAtEntityListener implements Listener {
         }
     }
 
+    @EventHandler
+    private void onInteractAtTransportChicken(PlayerInteractAtEntityEvent e) {
+        Player player = e.getPlayer();
+        Entity entity = e.getRightClicked();
+
+        TransportChicken transportChicken = transporterManager.getTransportChicken(entity);
+
+        if(transportChicken == null) {
+            return;
+        }
+
+        player.openInventory(transportChicken.getInventory());
+
+    }
+
     private boolean isInteractingWithTeleporter(PlayerInteractAtEntityEvent e) {
         Entity entity = e.getRightClicked();
         Player player = e.getPlayer();
@@ -146,6 +165,33 @@ public class PlayerInteractAtEntityListener implements Listener {
         } else {
             return false;
         }
+    }
+
+    @EventHandler
+    public void useChickenController(PlayerInteractAtEntityEvent e) {
+        Entity entity = e.getRightClicked();
+        Player player = e.getPlayer();
+        ItemStack itemStack = e.getPlayer().getInventory().getItemInMainHand();
+
+        if(entity.getType() != EntityType.CHICKEN) {
+            return;
+        }
+
+        if(!itemStack.isSimilar(ChickenControllerRecipe.getItemStack())) {
+            return;
+        }
+
+        if((entity.isCustomNameVisible()) && entity.getCustomName().contains("Transporter")) {
+            return;
+        }
+
+        TransportChicken transportChicken = transporterManager.createTransportChicken(player.getLocation(),player.getUniqueId());
+        entity.getWorld().strikeLightningEffect(entity.getLocation());
+        entity.remove();
+        transportChicken.setSpawned(true);
+        transportChicken.spawn(player);
+
+        itemStack.setAmount(0);
     }
 
 

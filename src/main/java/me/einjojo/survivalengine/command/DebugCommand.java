@@ -2,13 +2,12 @@ package me.einjojo.survivalengine.command;
 
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.entity.TransportChicken;
+import me.einjojo.survivalengine.manager.TransporterManager;
 import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
 import me.einjojo.survivalengine.recipe.TeleporterRecipe;
-import net.minecraft.server.level.ServerLevel;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.entity.Player;
 
 public class DebugCommand implements CommandExecutor {
@@ -41,9 +40,15 @@ public class DebugCommand implements CommandExecutor {
                     p.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
                     break;
                 case "chicken":
-                    TransportChicken transportChicken = new TransportChicken(p.getLocation(), p);
-                    ServerLevel serverLevel = ((CraftWorld) p.getWorld()).getHandle();
-                    serverLevel.addFreshEntity(transportChicken);
+
+                    TransporterManager transporterManager = SurvivalEngine.getInstance().getTransportManager();
+                    TransportChicken chicken = transporterManager.getTransportChicken(p.getUniqueId());
+                    if(chicken == null) {
+                        chicken = transporterManager.createTransportChicken(p.getLocation(), p.getUniqueId());
+                    }
+
+                    chicken.spawn(p);
+
                     p.sendMessage("spawned.");
                     break;
                 case "save":

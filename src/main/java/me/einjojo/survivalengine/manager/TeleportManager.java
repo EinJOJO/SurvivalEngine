@@ -138,6 +138,11 @@ public class TeleportManager {
 
     public void save(){
         config.getFile().set("teleporter", null);
+
+        if(TELEPORTER_MAP.size() == 0) {
+            return;
+        }
+
         TELEPORTER_MAP.forEach(config::saveTeleporter);
         config.saveFile();
         plugin.getLogger().log(Level.INFO, "Saved all teleporters");

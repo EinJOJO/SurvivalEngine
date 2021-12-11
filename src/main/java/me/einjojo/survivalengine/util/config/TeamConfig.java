@@ -5,7 +5,7 @@ import me.einjojo.survivalengine.object.Team;
 
 import java.util.UUID;
 
-public class TeamConfig extends ConfigFile{
+public class TeamConfig extends ConfigFile {
 
     public TeamConfig(SurvivalEngine plugin) {
         super(plugin, "team.yml");

@@ -76,6 +76,7 @@ public class DifficultyCommand implements CommandExecutor {
 
         if(time > 60) {
             sendUsageMessage(p);
+            return true;
         }
 
         setDifficulty(p, difficulty, time);
@@ -85,6 +86,7 @@ public class DifficultyCommand implements CommandExecutor {
     }
 
     private void sendUsageMessage(Player player) {
+        player.sendMessage(plugin.getPREFIX() + "Momentane Difficulty: §c" + player.getWorld().getDifficulty().name().toUpperCase());
         player.sendMessage(plugin.getPREFIX() + "Nutze: §e/difficulty <Schwierigkeit> <Zeit in Minuten>");
         player.sendMessage(plugin.getPREFIX() + "Die maximale Zeit beträgt §ceine Stunde");
     }

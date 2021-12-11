@@ -3,6 +3,7 @@ package me.einjojo.survivalengine.object;
 import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
@@ -15,6 +16,7 @@ public class SurvivalPlayer implements ConfigurationSerializable {
     private boolean scoreboardActivated;
     private final List<String> rewards;
     private boolean teamChat;
+    private BossBar bossBar;
 
 
     public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards, boolean teamChat) {
@@ -95,6 +97,14 @@ public class SurvivalPlayer implements ConfigurationSerializable {
 
     public List<Teleporter> getTeleporter() {
         return SurvivalEngine.getInstance().getTeleportManager().getTeleporterByPlayer(uuid);
+    }
+
+    public BossBar getBossBar() {
+        return bossBar;
+    }
+
+    public void setBossBar(BossBar bossBar) {
+        this.bossBar = bossBar;
     }
 
     @Override

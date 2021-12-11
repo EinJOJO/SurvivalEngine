@@ -3,10 +3,7 @@ package me.einjojo.survivalengine;
 import me.einjojo.survivalengine.command.*;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
-import me.einjojo.survivalengine.recipe.BedrockPickaxeRecipe;
-import me.einjojo.survivalengine.recipe.HasteRecipe;
-import me.einjojo.survivalengine.recipe.TeleportCrystalRecipe;
-import me.einjojo.survivalengine.recipe.TeleporterRecipe;
+import me.einjojo.survivalengine.recipe.*;
 import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
 import me.einjojo.survivalengine.tabcomplete.StatsTabComplete;
 import me.einjojo.survivalengine.tabcomplete.TeamTabComplete;
@@ -26,6 +23,7 @@ public final class SurvivalEngine extends JavaPlugin {
     private PlayerManager playerManager;
     private TeamManager teamManager;
     private BedManager bedManager;
+    private TransporterManager transporterManager;
 
     @Override
     public void onEnable() {
@@ -37,6 +35,7 @@ public final class SurvivalEngine extends JavaPlugin {
         teleportManager.load();
         playerManager.load();
         teamManager.load();
+        transporterManager.load();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 20*60*30, 20*60*60);
 
@@ -45,6 +44,7 @@ public final class SurvivalEngine extends JavaPlugin {
     @Override
     public void onDisable() {
         save();
+        this.transporterManager.clearMobs();
     }
 
     public InventoryManager getInventoryManager() {
@@ -65,6 +65,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new TeleporterRecipe();
         new HasteRecipe();
         new BedrockPickaxeRecipe();
+        new ChickenControllerRecipe();
     }
 
     private void initClasses() {
@@ -76,12 +77,14 @@ public final class SurvivalEngine extends JavaPlugin {
         this.teamManager = new TeamManager(this);
         this.bedManager = new BedManager();
         this.tabListManager = new TabListManager(this);
+        this.transporterManager = new TransporterManager(this);
     }
 
     private void save() {
         this.teleportManager.save();
         this.playerManager.save();
         this.teamManager.save();
+        this.transporterManager.save();
     }
 
 
@@ -120,6 +123,8 @@ public final class SurvivalEngine extends JavaPlugin {
         new PlayerChatListener(this);
         new EntityDismountListener(this);
         new AnvilListener(this);
+        new EntityDeathListener(this);
+        new PlayerChangedWorldListener(this);
     }
 
     public TeamManager getTeamManager() {
@@ -142,7 +147,12 @@ public final class SurvivalEngine extends JavaPlugin {
         return instance;
     }
 
+    public TransporterManager getTransportManager() {
+        return transporterManager;
+    }
+
     public String getVERSION() {
         return VERSION;
     }
+
 }

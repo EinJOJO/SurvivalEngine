@@ -1,11 +1,13 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import me.einjojo.survivalengine.entity.TransportChicken;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoinListener implements Listener {
@@ -24,10 +26,18 @@ public class PlayerJoinListener implements Listener {
         plugin.getRecipeManager().loadRecipes(player);
         plugin.getTabListManager().setPlayerList(player);
         plugin.getTabListManager().registerTeam(player);
+        TransportChicken chicken = plugin.getTransportManager().getTransportChicken(player.getUniqueId());
+        if(chicken != null) {
+            if(chicken.isSpawned()) {
+                chicken.spawn(player);
+            }
+        }
 
         e.setJoinMessage(plugin.getPREFIX() + "§e" + player.getName() + "§7 hat den Server §abetreten");
         player.resetTitle();
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
         player.sendTitle("§b§lWillkommen!", "", 15, 30, 15);
     }
+
+
 }

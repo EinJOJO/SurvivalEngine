@@ -8,11 +8,7 @@ public class TeleporterConfig extends ConfigFile{
         super(plugin, "teleporter.yml");
     }
 
-    public void saveTeleporter(Teleporter teleporter) {
-        getFile().set("teleporter."+teleporter.getName(), teleporter.serialize());
-    }
-
     public void saveTeleporter(String name, Teleporter teleporter) {
-        getFile().set("teleporter."+name, teleporter.serialize());
+        getFile().set("teleporter." + name, teleporter.serialize());
     }
 }
