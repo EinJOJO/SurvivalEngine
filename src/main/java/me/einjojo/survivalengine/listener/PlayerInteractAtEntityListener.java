@@ -138,9 +138,19 @@ public class PlayerInteractAtEntityListener implements Listener {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
 
+        String name = entity.getCustomName();
+        if(name == null) {
+            return;
+        }
+
+        if(!name.contains("'s Transporter")) {
+            return;
+        }
+
         TransportChicken transportChicken = transporterManager.getTransportChicken(entity);
 
         if(transportChicken == null) {
+            player.sendMessage("kaputt.");
             return;
         }
 

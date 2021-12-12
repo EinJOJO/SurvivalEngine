@@ -50,6 +50,17 @@ public class TransporterManager {
         }
     }
 
+    public void changedWorld(Player player) {
+        UUID uuid = player.getUniqueId();
+        if(CHICKEN_MAP.containsKey(uuid)) {
+            Inventory inventory = CHICKEN_MAP.get(uuid).getInventory();
+            removeChicken(uuid);
+
+            createTransportChicken(player.getLocation(), uuid, inventory, true).spawn(player);
+
+        }
+    }
+
     public TransportChicken createTransportChicken(Location location, UUID owner) {
         return createTransportChicken(location, owner, createInventory(), false);
     }

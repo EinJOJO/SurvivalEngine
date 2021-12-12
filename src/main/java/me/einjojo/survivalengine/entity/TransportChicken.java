@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.entity;
 
 
+import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.entity.pathfinder.FollowTargetGoal;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -54,7 +55,7 @@ public class TransportChicken extends Chicken implements ConfigurationSerializab
     @Override
     public void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new FollowTargetGoal(this, 1.7, 8));
+        this.goalSelector.addGoal(1, new FollowTargetGoal(this, 1.7, 14));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8, 0.9F));
     }
 
@@ -77,6 +78,15 @@ public class TransportChicken extends Chicken implements ConfigurationSerializab
         this.unsetRemoved();
         this.setPos(location.getX(), location.getY(), location.getZ());
         this.setCustomName(new TextComponent("§e" + target.getName() + "'s Transporter"));
+        this.setInvulnerable(true);
+        if(this.isInWall()) {
+            this.setPos(target.getLocation().getX(), target.getLocation().getY(), target.getLocation().getZ());
+        }
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(SurvivalEngine.getInstance(), ()->{
+            this.setInvulnerable(false);
+        }, 100L);
+
         setTarget(target);
         setSpawned(true);
 
