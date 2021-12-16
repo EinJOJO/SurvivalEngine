@@ -3,14 +3,11 @@ package me.einjojo.survivalengine.listener;
 import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.events.TeleporterPlaceEvent;
 import me.einjojo.survivalengine.object.Teleporter;
-import me.einjojo.survivalengine.recipe.TeleporterRecipe;
 import me.einjojo.survivalengine.util.PlayerChatInput;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class TeleporterPlaceListener implements Listener {
@@ -46,7 +43,9 @@ public class TeleporterPlaceListener implements Listener {
                 plugin.getTeleportManager().createTeleporter(teleporter);
 
             } catch (Exception exception) {
-
+                e.getPlayer().sendMessage(exception.getMessage());
+                e.setCancelled(true);
+                return;
             }
 
             Entity teleporterEntity = teleporterLocation.getWorld().spawnEntity(teleporterLocation, EntityType.ENDER_CRYSTAL);

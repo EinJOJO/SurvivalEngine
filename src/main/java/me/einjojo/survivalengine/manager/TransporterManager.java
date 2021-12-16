@@ -55,9 +55,7 @@ public class TransporterManager {
         if(CHICKEN_MAP.containsKey(uuid)) {
             Inventory inventory = CHICKEN_MAP.get(uuid).getInventory();
             removeChicken(uuid);
-
             createTransportChicken(player.getLocation(), uuid, inventory, true).spawn(player);
-
         }
     }
 

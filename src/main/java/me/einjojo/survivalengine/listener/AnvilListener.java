@@ -67,8 +67,11 @@ public class AnvilListener implements Listener {
     @EventHandler
     public void onCloseAnvil(InventoryCloseEvent e) {
         if(e.getInventory().getType().equals(InventoryType.ANVIL)) {
-            playerManager.getPlayer((Player) e.getPlayer()).getBossBar().setVisible(false);
+            BossBar bossbar = playerManager.getPlayer((Player) e.getPlayer()).getBossBar();
 
+            if(bossbar != null) {
+                bossbar.setVisible(false);
+            }
         }
     }
 }
