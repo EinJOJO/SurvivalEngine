@@ -4,11 +4,20 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.object.SurvivalPlayer;
 import me.einjojo.survivalengine.object.Team;
 import me.einjojo.survivalengine.util.TextUtil;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class PlayerChatListener implements Listener {
 
@@ -26,16 +35,22 @@ public class PlayerChatListener implements Listener {
             SurvivalPlayer survivalPlayer = plugin.getPlayerManager().getPlayer(e.getPlayer());
             String message = e.getMessage();
             String playerName = e.getPlayer().getName();
+            TextComponent senderComponent;
             if(survivalPlayer.getTeam() == null) {
-                Bukkit.broadcastMessage(String.format("§7%s §8» §7%s", playerName, message));
+                senderComponent = new TextComponent("§7" + playerName);
             } else {
-                Team team = survivalPlayer.getTeam();
-                if(survivalPlayer.isTeamChat()) {
-                    team.chat(TextUtil.toTeamChat(playerName, message));
-                } else {
-                    Bukkit.broadcastMessage(String.format("§7[§e%s§7] §7%s §8» §7%s", team.getName(), playerName, message));
-                }
+                senderComponent = new TextComponent(String.format("§7[§e%s§7] %s", survivalPlayer.getTeam().getName(), playerName));
             }
+            String timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now());
+            Text messageMeta = new Text(String.format("§7Gesendet um: §e%s", timeFormat));
+            senderComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, messageMeta));
+            TextComponent messageComponent = new TextComponent(" §8» §7" + message);
+            senderComponent.addExtra(messageComponent);
+
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.spigot().sendMessage(senderComponent);
+            }
+
         }
     }
 }
