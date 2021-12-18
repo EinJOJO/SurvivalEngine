@@ -125,6 +125,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new AnvilListener(this);
         new EntityDeathListener(this);
         new ChangedWorldListener(this);
+        new PotionEffectListener(this);
     }
 
     public TeamManager getTeamManager() {

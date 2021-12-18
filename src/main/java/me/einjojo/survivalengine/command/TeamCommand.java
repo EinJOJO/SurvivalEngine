@@ -129,7 +129,7 @@ public class TeamCommand implements CommandExecutor {
 
         String message = TextUtil.toTeamChat(player.getName(), stringBuilder.toString());
 
-        team.chat(message);
+        team.sendMessage(message);
     }
 
 
@@ -378,6 +378,7 @@ public class TeamCommand implements CommandExecutor {
             teamManager.deleteTeam(team);
         } else {
             DELETE_TEAM.add(team);
+            DELETE_TEAM.remove(UUID.randomUUID());
 
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, ()->{
                 DELETE_TEAM.remove(team);

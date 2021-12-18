@@ -1,6 +1,7 @@
 package me.einjojo.survivalengine.object;
 
 import me.einjojo.survivalengine.SurvivalEngine;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -107,11 +108,20 @@ public class Team implements ConfigurationSerializable {
         return getInvites().contains(player);
     }
 
-    public void chat(String message) {
+    public void sendMessage(String message) {
         getMembers().forEach((memberUUID) -> {
             Player target = Bukkit.getPlayer(memberUUID);
             if(target != null) {
                 target.sendMessage(message);
+            }
+        });
+    }
+
+    public void sendMessage(TextComponent textComponent) {
+        getMembers().forEach((memberUUID) -> {
+            Player target = Bukkit.getPlayer(memberUUID);
+            if(target != null) {
+                target.spigot().sendMessage(textComponent);
             }
         });
     }
