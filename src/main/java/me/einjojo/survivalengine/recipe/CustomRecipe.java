@@ -15,6 +15,13 @@ public abstract class CustomRecipe {
         SurvivalEngine.getInstance().getRecipeManager().addRecipe(this);
     }
 
+    public CustomRecipe(NamespacedKey namespace, boolean register) {
+        this.namespace = namespace;
+        if(register) {
+            SurvivalEngine.getInstance().getRecipeManager().addRecipe(this);
+        }
+    }
+
     public NamespacedKey getNamespace() {
         return namespace;
     }

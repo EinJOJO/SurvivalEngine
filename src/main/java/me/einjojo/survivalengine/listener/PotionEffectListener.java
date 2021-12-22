@@ -1,7 +1,6 @@
 package me.einjojo.survivalengine.listener;
 
 import me.einjojo.survivalengine.SurvivalEngine;
-import net.minecraft.world.item.alchemy.Potion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -9,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionType;
 
 import java.util.*;
 
@@ -39,9 +37,8 @@ public class PotionEffectListener implements Listener {
 
         if(e.getAction() == EntityPotionEffectEvent.Action.CHANGED) {
             e.setOverride(true);
-            PotionEffect oldEffect = e.getOldEffect();
             PotionEffect newEffect = e.getNewEffect();
-            if(newEffect == null || oldEffect == null) {
+            if(newEffect == null) {
                 return;
             }
 
@@ -52,27 +49,25 @@ public class PotionEffectListener implements Listener {
 
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-                    ArrayList<PotionEffect> asyncPotionEffects = EFFECT_MAP.get(player);
-                    Map<PotionEffect, Integer> applied = new HashMap<>();
-                    asyncPotionEffects.forEach((effect)->{
+                    ArrayList<PotionEffect> potionEffectArrayList = EFFECT_MAP.get(player);
+                    Map<PotionEffect, Integer> potionEffectAmplifierMap = new HashMap<>();
+                    potionEffectArrayList.forEach((effect)->{
 
-                        if(!applied.containsKey(effect)) {
-                            applied.put(effect, 0);
+                        if(!potionEffectAmplifierMap.containsKey(effect)) {
+                            potionEffectAmplifierMap.put(effect, effect.getAmplifier());
                             return;
                         }
-
-
-                        int amplifier = applied.get(effect) + 1;
-
+                        int amplifier = potionEffectAmplifierMap.get(effect) + effect.getAmplifier() + 1;
                         if(amplifier > 10) {
                             return;
                         }
-
-                        PotionEffect newPotionEffect = oldEffect.getType().createEffect(effect.getDuration(), amplifier);
-                        player.addPotionEffect(newPotionEffect);
-                        applied.put(effect, amplifier);
-
+                        potionEffectAmplifierMap.put(effect, amplifier);
                     });
+
+                    potionEffectAmplifierMap.forEach((key, value) -> {
+                        player.addPotionEffect(key.getType().createEffect(key.getDuration(), value));
+                    });
+
                     EFFECT_MAP.remove(player);
                 }, 2);
             }

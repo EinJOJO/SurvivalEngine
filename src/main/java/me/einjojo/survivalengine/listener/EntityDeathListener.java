@@ -4,10 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import me.einjojo.survivalengine.entity.TransportChicken;
 import me.einjojo.survivalengine.manager.TransporterManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -48,6 +45,7 @@ public class EntityDeathListener implements Listener {
         if(chickenOwner != null) {
             chickenOwner.sendMessage("§cDein Transporter ist verstorben...");
         }
+
     }
 
 }

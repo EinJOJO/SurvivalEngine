@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 
@@ -16,6 +17,8 @@ public class DifficultyCommand implements CommandExecutor {
 
     private final SurvivalEngine plugin;
     private final HashMap<Player, Long> cooldown;
+
+    private BukkitTask taskID;
 
     public DifficultyCommand(SurvivalEngine plugin) {
         this.plugin = plugin;
@@ -107,7 +110,10 @@ public class DifficultyCommand implements CommandExecutor {
         Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde von §e" + player.getName() + " §7auf §c" + difficulty.name() + " §7gesetzt.");
         Bukkit.broadcastMessage(plugin.getPREFIX() + "Länge: §e" + time + " Minuten");
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+        if(taskID != null) {
+            taskID.cancel();
+        }
+        taskID = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             world.setDifficulty(Difficulty.NORMAL);
             Bukkit.broadcastMessage(plugin.getPREFIX() + "Die Schwierigkeit wurde auf §cNORMAL §7zurückgesetzt.");
         }, time * 60 * 20);

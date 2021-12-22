@@ -4,6 +4,7 @@ main: me.einjojo.survivalengine.SurvivalEngine
 api-version: 1.18
 authors: [ Ein_Jojo ]
 description: Just improving the overall survival feeling
+depend: [ProtocolLib]
 commands:
   team:
     aliases:
@@ -26,3 +27,5 @@ commands:
     description: none
   ping:
     description: Show players Ping.
+  vanish:
+    description: Vanish.

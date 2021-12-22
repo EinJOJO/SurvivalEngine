@@ -1,5 +1,7 @@
 package me.einjojo.survivalengine;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import me.einjojo.survivalengine.command.*;
 import me.einjojo.survivalengine.listener.*;
 import me.einjojo.survivalengine.manager.*;
@@ -8,6 +10,7 @@ import me.einjojo.survivalengine.tabcomplete.DifficultyTabComplete;
 import me.einjojo.survivalengine.tabcomplete.StatsTabComplete;
 import me.einjojo.survivalengine.tabcomplete.TeamTabComplete;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Villager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SurvivalEngine extends JavaPlugin {
@@ -24,6 +27,8 @@ public final class SurvivalEngine extends JavaPlugin {
     private TeamManager teamManager;
     private BedManager bedManager;
     private TransporterManager transporterManager;
+    private ProtocolManager protocolManager;
+    private EnchantmentManager enchantmentManager;
 
     @Override
     public void onEnable() {
@@ -36,6 +41,7 @@ public final class SurvivalEngine extends JavaPlugin {
         playerManager.load();
         teamManager.load();
         transporterManager.load();
+
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 20*60*30, 20*60*60);
 
@@ -78,6 +84,8 @@ public final class SurvivalEngine extends JavaPlugin {
         this.bedManager = new BedManager();
         this.tabListManager = new TabListManager(this);
         this.transporterManager = new TransporterManager(this);
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
+        this.enchantmentManager = new EnchantmentManager(this);
     }
 
     private void save() {
@@ -95,6 +103,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new TeleporterCommand(this);
         new StatsCommand(this);
         new PingCommand(this);
+        new VanishCommand(this);
     }
 
     private void registerTabComplete() {
@@ -126,6 +135,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new EntityDeathListener(this);
         new ChangedWorldListener(this);
         new PotionEffectListener(this);
+        new VillagerListener(this);
     }
 
     public TeamManager getTeamManager() {
@@ -156,4 +166,11 @@ public final class SurvivalEngine extends JavaPlugin {
         return VERSION;
     }
 
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
+    }
+
+    public EnchantmentManager getEnchantmentManager() {
+        return enchantmentManager;
+    }
 }

@@ -20,15 +20,20 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerInteractListener implements Listener {
 
     private final SurvivalEngine plugin;
     private final TeleportManager teleportManager;
-    private int pickaxeTaskID;
+    private final List<Integer> taskIDList;
 
     public PlayerInteractListener(SurvivalEngine plugin) {
         this.plugin = plugin;
         this.teleportManager = plugin.getTeleportManager();
+        this.taskIDList = new ArrayList<>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -57,29 +62,36 @@ public class PlayerInteractListener implements Listener {
 
         if(e.getHand() == null) return;
         if(!e.getHand().equals(EquipmentSlot.HAND)) return;
-        if(!e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
-        if(teleportManager.getINTERACT_BLACKLIST().contains(player)) return;
-        if(itemStack.getItemMeta() == null) return;
-        if(!itemStack.getItemMeta().getDisplayName().equals(TeleportCrystalRecipe.getItemStack().getItemMeta().getDisplayName())) return;
+        if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(teleportManager.getINTERACT_BLACKLIST().contains(player)) return;
+            if(itemStack.getItemMeta() == null) return;
+            if(!itemStack.getItemMeta().getDisplayName().equals(TeleportCrystalRecipe.getItemStack().getItemMeta().getDisplayName())) return;
 
-        TeleportCrystalUtil utility = new TeleportCrystalUtil();
-        String teleporterName = utility.getTeleporterNameFromCrystal(itemStack);
+            TeleportCrystalUtil utility = new TeleportCrystalUtil();
+            String teleporterName = utility.getTeleporterNameFromCrystal(itemStack);
 
-        if(teleporterName == null) {
-            player.sendMessage(plugin.getPREFIX() + "§cDer Kristall ist an keinen Teleporter gebunden.");
-            return;
-        }
+            if(teleporterName == null) {
+                player.sendMessage(plugin.getPREFIX() + "§cDer Kristall ist an keinen Teleporter gebunden.");
+                return;
+                                                        }
 
-        Teleporter teleporter = teleportManager.getTeleporter(teleporterName);
-        if(teleporter == null) {
-            player.sendMessage(plugin.getPREFIX() + "§cDer Teleporter existiert nicht mehr!");
+                                                        Teleporter teleporter = teleportManager.getTeleporter(teleporterName);
+                                            if(teleporter == null) {
+                player.sendMessage(plugin.getPREFIX() + "§cDer Teleporter existiert nicht mehr!");
+                itemStack.setAmount(itemStack.getAmount() - 1);
+                player.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
+                return;
+            }
+
+            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1, 5);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cDu darfst nicht auf einen Block gucken"));
+                return;
+            }
+
             itemStack.setAmount(itemStack.getAmount() - 1);
-            player.getInventory().addItem(TeleportCrystalRecipe.getItemStack());
-            return;
+            teleportManager.teleport(player, teleporter);
         }
-
-        itemStack.setAmount(itemStack.getAmount() - 1);
-        teleportManager.teleport(player, teleporter);
     }
 
     @EventHandler
@@ -98,15 +110,15 @@ public class PlayerInteractListener implements Listener {
 
         player.sendTitle("§cLauf!", "§7Gleich macht es §cBoom§7...", 5, 20, 20);
 
-
-        pickaxeTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        int index = taskIDList.size();
+         int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             int counter = 5;
             @Override
             public void run() {
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1 ,1);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c" + counter));
                 if(counter == 0) {
-                    Bukkit.getScheduler().cancelTask(pickaxeTaskID);
+                    Bukkit.getScheduler().cancelTask(taskIDList.get(index));
                     clickedBlock.setType(Material.AIR);
                     location.getWorld().createExplosion(location, 7, false, true);
                     return;
@@ -114,6 +126,7 @@ public class PlayerInteractListener implements Listener {
                 counter--;
             }
         },0, 20);
+        taskIDList.add(taskID);
     }
 
 }

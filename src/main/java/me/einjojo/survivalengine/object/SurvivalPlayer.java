@@ -17,14 +17,16 @@ public class SurvivalPlayer implements ConfigurationSerializable {
     private final List<String> rewards;
     private boolean teamChat;
     private BossBar bossBar;
+    private boolean resetSpawn;
 
 
-    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards, boolean teamChat) {
+    public SurvivalPlayer(UUID uuid, boolean scoreboardActivated, PlayerStats playerStats, List<String> rewards, boolean teamChat, boolean resetSpawn) {
         this.uuid = uuid;
         this.scoreboardActivated = scoreboardActivated;
         this.statistics = playerStats;
         this.rewards = rewards;
         this.teamChat = teamChat;
+        this.resetSpawn = resetSpawn;
     }
 
     public SurvivalPlayer(Player player) {
@@ -33,6 +35,7 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         this.statistics = new PlayerStats(player.getUniqueId());
         this.rewards = new ArrayList<>();
         this.teamChat = false;
+        this.resetSpawn = false;
     }
 
     public OfflinePlayer getOfflinePlayer () {
@@ -107,6 +110,14 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         this.bossBar = bossBar;
     }
 
+    public void setResetSpawn(boolean resetSpawn) {
+        this.resetSpawn = resetSpawn;
+    }
+
+    public boolean isResetSpawn() {
+        return resetSpawn;
+    }
+
     @Override
     public Map<String, Object> serialize() {
         HashMap<String, Object> players = new HashMap<>();
@@ -115,6 +126,7 @@ public class SurvivalPlayer implements ConfigurationSerializable {
         players.put("stats", getStatistics().serialize());
         players.put("rewards", getRewards());
         players.put("teamchat", isTeamChat());
+        players.put("resetSpawn", isResetSpawn());
 
         return players;
     }

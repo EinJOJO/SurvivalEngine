@@ -84,8 +84,9 @@ public class PlayerManager {
             PlayerStats playerStats = loadStats(configurationSection.getConfigurationSection(player + ".stats"));
             List<String> rewards = configurationSection.getStringList(player + ".rewards");
             boolean teamChat = configurationSection.getBoolean(player + ".teamchat");
+            boolean resetSpawn = configurationSection.isBoolean(player + ".resetSpawn") && configurationSection.getBoolean(player + ".resetSpawn");
 
-            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats, rewards, teamChat));
+            createPlayer(uuid, new SurvivalPlayer(uuid, hasScoreboard, playerStats, rewards, teamChat, resetSpawn));
         });
 
         plugin.getLogger().info(String.format("Loaded %d players from players.yml", this.players.size()));
