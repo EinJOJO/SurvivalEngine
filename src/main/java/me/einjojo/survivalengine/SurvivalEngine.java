@@ -136,6 +136,7 @@ public final class SurvivalEngine extends JavaPlugin {
         new ChangedWorldListener(this);
         new PotionEffectListener(this);
         new VillagerListener(this);
+        new PingListener(this);
     }
 
     public TeamManager getTeamManager() {
