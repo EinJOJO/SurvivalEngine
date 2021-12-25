@@ -20,13 +20,14 @@ public class VillagerListener implements Listener {
 
     @EventHandler
     public void onTradeUnlock(VillagerAcquireTradeEvent e) {
+        if(!(e instanceof Villager)) return;
         Villager villager = (Villager) e.getEntity();
         if(villager.getProfession() != Villager.Profession.LIBRARIAN) {
             return;
         }
 
         Random random = new Random();
-        if(random.nextInt(500) == 0) {
+        if(random.nextInt(5000) == 0) {
             e.setRecipe(TelepathyBookRecipe.getMerchantRecipe());
         }
     }

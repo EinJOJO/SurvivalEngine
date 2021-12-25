@@ -48,6 +48,7 @@ public class PlayerChatListener implements Listener {
                 senderComponent.addExtra(messageComponent);
                 survivalPlayer.getTeam().sendMessage(senderComponent);
             } else {
+                Bukkit.getLogger().info(String.format("[CHAT] %s: %s", playerName, message));
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.spigot().sendMessage(senderComponent);
                 }
