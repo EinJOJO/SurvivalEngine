@@ -49,6 +49,7 @@ public class StatsListener implements Listener {
             killerStats.setPlayerKills(killerStats.getPlayerKills() + 1);
         }
         stats.addDeaths(1);
+        plugin.getTabListManager().update();
     }
 
     @EventHandler

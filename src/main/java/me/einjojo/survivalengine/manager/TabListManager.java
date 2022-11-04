@@ -51,6 +51,7 @@ public class TabListManager {
         if (playerTeam != null) {
             team.setPrefix("§7[§e"+ playerTeam.getName() + "§7] ");
         }
+        team.setSuffix("§8[§c" + survivalPlayer.getStatistics().getDeaths() + "§8]");
         team.setColor(ChatColor.GRAY);
         this.TEAM_MAP.put(player.getUniqueId(), s);
         update();

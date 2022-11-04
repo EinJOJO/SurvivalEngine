@@ -75,7 +75,7 @@ public final class SurvivalEngine extends JavaPlugin {
     private void registerCommands() {
         new DifficultyCommand(this);
         new TeamCommand(this);
-        //new GetCommand(this);
+        new GetCommand(this);
         new TeleporterCommand(this);
         new StatsCommand(this);
     }

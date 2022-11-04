@@ -23,6 +23,11 @@ public class GetCommand implements CommandExecutor {
         }
         final Player p = (Player) sender;
 
+        if (!p.hasPermission("engine.admin")) {
+            p.sendMessage(plugin.getPREFIX() + " §c Dazu hast du keine Rechte... Du frau.");
+            return true;
+        }
+
         if(args.length == 1) {
             switch (args[0]) {
                 case "teleporter":

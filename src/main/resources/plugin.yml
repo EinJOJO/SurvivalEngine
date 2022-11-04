@@ -5,6 +5,8 @@ api-version: 1.18
 authors: [ Ein_Jojo ]
 description: Just improving the overall survival feeling
 commands:
+  get:
+    description: Admin command
   team:
     aliases:
       - teams

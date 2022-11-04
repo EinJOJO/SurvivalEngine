@@ -45,13 +45,16 @@ public class TeamCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        player.sendMessage(plugin.getPREFIX() + "§cDie Teamfunktion wurde deaktiviert.");
 
+        return true;
+        /*
         if(args.length < 1) {
             sendUsage(player);
             return true;
         }
 
-        switch (args[0].toLowerCase()) {
+       switch (args[0].toLowerCase()) {
             case "leave":
                 leaveTeam(player);
                 break;
@@ -95,8 +98,9 @@ public class TeamCommand implements CommandExecutor {
             default:
                 sendUsage(player);
                 break;
-        }
-        return true;
+                return true;
+        }*/
+
     }
 
 
