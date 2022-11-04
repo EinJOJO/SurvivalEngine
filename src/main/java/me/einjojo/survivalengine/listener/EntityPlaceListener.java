@@ -4,7 +4,7 @@ import me.einjojo.survivalengine.SurvivalEngine;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEnderCrystal;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEnderCrystal;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
